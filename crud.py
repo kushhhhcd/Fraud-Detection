@@ -1,0 +1,319 @@
+from datetime import datetime
+
+from sqlalchemy.orm import Session
+
+import database_models as models
+import schemas
+
+
+# users
+
+def create_user(db: Session, user: schemas.UserCreate):
+
+    db_user = models.User(
+        account_id=user.account_id,
+        name=user.name,
+        account_type=user.account_type,
+        email=user.email,
+        password_hash=user.password_hash,
+        created_at=datetime.now()
+    )
+
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+
+    return db_user
+
+
+def get_users(db: Session):
+    return db.query(models.User).all()
+
+
+def get_user(db: Session, user_id: int):
+
+    return db.query(models.User).filter(
+        models.User.user_id == user_id
+    ).first()
+
+
+def update_user(
+    db: Session,
+    user_id: int,
+    user: schemas.UserUpdate
+):
+
+    db_user = get_user(db, user_id)
+
+    if not db_user:
+        return None
+
+    update_data = user.model_dump(exclude_unset=True)
+
+    for key, value in update_data.items():
+        setattr(db_user, key, value)
+
+    db.commit()
+    db.refresh(db_user)
+
+    return db_user
+
+
+def delete_user(db: Session, user_id: int):
+
+    db_user = get_user(db, user_id)
+
+    if not db_user:
+        return None
+
+    db.delete(db_user)
+    db.commit()
+
+    return db_user
+
+
+# transactions
+
+def create_transaction(
+    db: Session,
+    transaction: schemas.TransactionCreate
+):
+
+    db_transaction = models.Transaction(
+        user_id=transaction.user_id,
+        sender_account_id=transaction.sender_account_id,
+        destination_account_id=transaction.destination_account_id,
+        step=transaction.step,
+        transaction_type=transaction.transaction_type,
+        amount=transaction.amount,
+        old_balance=transaction.old_balance,
+        new_balance=transaction.new_balance,
+        is_fraud=transaction.is_fraud
+    )
+
+    db.add(db_transaction)
+    db.commit()
+    db.refresh(db_transaction)
+
+    return db_transaction
+
+
+def get_transactions(db: Session):
+    return db.query(models.Transaction).all()
+
+
+def get_transaction(db: Session, transaction_id: int):
+
+    return db.query(models.Transaction).filter(
+        models.Transaction.transaction_id == transaction_id
+    ).first()
+
+
+def update_transaction(
+    db: Session,
+    transaction_id: int,
+    transaction: schemas.TransactionUpdate
+):
+
+    db_transaction = get_transaction(db, transaction_id)
+
+    if not db_transaction:
+        return None
+
+    update_data = transaction.model_dump(exclude_unset=True)
+
+    for key, value in update_data.items():
+        setattr(db_transaction, key, value)
+
+    db.commit()
+    db.refresh(db_transaction)
+
+    return db_transaction
+
+
+def delete_transaction(db: Session, transaction_id: int):
+
+    db_transaction = get_transaction(db, transaction_id)
+
+    if not db_transaction:
+        return None
+
+    db.delete(db_transaction)
+    db.commit()
+
+    return db_transaction
+
+
+# models
+
+def create_model(db: Session, model: schemas.ModelCreate):
+
+    db_model = models.Model(
+        model_id=model.model_id,
+        model_name=model.model_name,
+        model_accuracy=model.model_accuracy,
+        model_precision=model.model_precision,
+        model_recall=model.model_recall,
+        model_f1_score=model.model_f1_score,
+        model_roc_auc=model.model_roc_auc,
+        model_status=model.model_status,
+        model_training_time=model.model_training_time
+    )
+
+    db.add(db_model)
+    db.commit()
+    db.refresh(db_model)
+
+    return db_model
+
+
+def get_models(db: Session):
+    return db.query(models.Model).all()
+
+
+def get_model(db: Session, model_id: str):
+
+    return db.query(models.Model).filter(
+        models.Model.model_id == model_id
+    ).first()
+
+
+def update_model(
+    db: Session,
+    model_id: str,
+    model: schemas.ModelUpdate
+):
+
+    db_model = get_model(db, model_id)
+
+    if not db_model:
+        return None
+
+    update_data = model.model_dump(exclude_unset=True)
+
+    for key, value in update_data.items():
+        setattr(db_model, key, value)
+
+    db.commit()
+    db.refresh(db_model)
+
+    return db_model
+
+
+def delete_model(db: Session, model_id: str):
+
+    db_model = get_model(db, model_id)
+
+    if not db_model:
+        return None
+
+    db.delete(db_model)
+    db.commit()
+
+    return db_model
+
+
+# fraud predictions
+
+def create_fraud_prediction(
+    db: Session,
+    fraud: schemas.FraudPredictionCreate
+):
+
+    db_fraud = models.Fraud_prediction(
+        transaction_id=fraud.transaction_id,
+        model_id=fraud.model_id,
+        Fraud_score=fraud.Fraud_score,
+        prediction=fraud.prediction,
+        threshold=fraud.threshold,
+        prediction_time=fraud.prediction_time or datetime.now()
+    )
+
+    db.add(db_fraud)
+    db.commit()
+    db.refresh(db_fraud)
+
+    return db_fraud
+
+
+def get_fraud_predictions(db: Session):
+    return db.query(models.Fraud_prediction).all()
+
+
+def get_fraud_prediction(
+    db: Session,
+    prediction_id: int
+):
+
+    return db.query(models.Fraud_prediction).filter(
+        models.Fraud_prediction.prediction_id == prediction_id
+    ).first()
+
+
+def delete_fraud_prediction(
+    db: Session,
+    prediction_id: int
+):
+
+    fraud = get_fraud_prediction(db, prediction_id)
+
+    if not fraud:
+        return None
+
+    db.delete(fraud)
+    db.commit()
+
+    return fraud
+
+
+# drift reports
+
+def create_drift_report(
+    db: Session,
+    report: schemas.DriftReportCreate
+):
+
+    db_report = models.drift_reports(
+        model_id=report.model_id,
+        feature_name=report.feature_name,
+        drift_score=report.drift_score,
+        drift_status=report.drift_status,
+        checked_at=report.checked_at or datetime.now(),
+        report_time=report.report_time or datetime.now()
+    )
+
+    db.add(db_report)
+    db.commit()
+    db.refresh(db_report)
+
+    return db_report
+
+
+def get_drift_reports(db: Session):
+    return db.query(models.drift_reports).all()
+
+
+def get_drift_report(
+    db: Session,
+    report_id: int
+):
+
+    return db.query(models.drift_reports).filter(
+        models.drift_reports.report_id == report_id
+    ).first()
+
+
+def delete_drift_report(
+    db: Session,
+    report_id: int
+):
+
+    report = get_drift_report(db, report_id)
+
+    if not report:
+        return None
+
+    db.delete(report)
+    db.commit()
+
+    return report
