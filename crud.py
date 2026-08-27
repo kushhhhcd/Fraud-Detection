@@ -25,9 +25,13 @@ def create_user(db: Session, user: schemas.UserCreate):
 
     return db_user
 
-
-def get_users(db: Session):
-    return db.query(models.User).all()
+def get_users(db: Session, skip: int = 0, limit: int = 100):
+    return (
+        db.query(models.User)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
 
 def get_user(db: Session, user_id: int):
@@ -97,9 +101,13 @@ def create_transaction(
 
     return db_transaction
 
-
-def get_transactions(db: Session):
-    return db.query(models.Transaction).all()
+def get_transactions(db: Session, skip: int = 0, limit: int = 100):
+    return (
+        db.query(models.Transaction)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
 
 
 def get_transaction(db: Session, transaction_id: int):

@@ -20,13 +20,13 @@ def create_transaction(
 
     return crud.create_transaction(db, transaction)
 
-
 @router.get("/", response_model=list[schemas.TransactionResponse])
 def get_transactions(
+    skip: int = 0,
+    limit: int = 100,
     db: Session = Depends(get_db)
 ):
-
-    return crud.get_transactions(db)
+    return crud.get_transactions(db, skip, limit)
 
 
 @router.get(
