@@ -1,9 +1,13 @@
+# =========================
+# PYTHON
+# =========================
+
 # Python cache
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environment
+# Virtual environments
 venv/
 env/
 .venv/
@@ -11,6 +15,38 @@ env/
 # Environment variables
 .env
 .env.*
+!.env.example
+
+# Python build files
+build/
+dist/
+*.egg-info/
+
+# =========================
+# FRONTEND / NODE / VITE
+# =========================
+
+# Node dependencies
+node_modules/
+
+# Vite / frontend build output
+frontend/dist/
+
+# Frontend environment file
+frontend/.env
+
+# Keep frontend environment template
+!frontend/.env.example
+
+# npm logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# IDE / EDITORS
+# =========================
 
 # VS Code
 .vscode/
@@ -18,28 +54,37 @@ env/
 # PyCharm
 .idea/
 
-# Jupyter
+# =========================
+# JUPYTER
+# =========================
+
 .ipynb_checkpoints/
 
-# Python build files
-build/
-dist/
-*.egg-info/
+# =========================
+# LOGS / TEMP FILES
+# =========================
 
-# Logs
 *.log
-
-# ML model files
-*.pkl
-*.joblib
-
-# Temporary files
 *.tmp
 *.temp
 
-# OS files
-.DS_Store
-Thumbs.db
+# =========================
+# ML MODEL FILES
+# =========================
+
+*.pkl
+*.joblib
+
+# =========================
+# DATASETS / LARGE DATA
+# =========================
 
 data/
 dataset.csv
+
+# =========================
+# OS FILES
+# =========================
+
+.DS_Store
+Thumbs.db
