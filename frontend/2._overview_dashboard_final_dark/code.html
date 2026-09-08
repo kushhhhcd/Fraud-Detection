@@ -1,0 +1,368 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SentinelML - Executive Overview Dashboard</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          background: "#0B111E",
+          surface: "#0D1320",
+          card: "#131D31",
+          "card-subtle": "#111827",
+          "card-border": "#1E293B",
+          primary: "#06B6D4",
+          "primary-light": "#4CD7F6",
+          accent: "#4FDCB8",
+          error: "#EF4444",
+          warning: "#F59E0B",
+          success: "#10B981",
+          muted: "#94A3B8",
+          dark: "#080E1B"
+        },
+        fontFamily: {
+          sans: ["Inter", "sans-serif"],
+          mono: ["JetBrains Mono", "monospace"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    font-size: 18px;
+    line-height: 1;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0B111E;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1E293B;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
+</style>
+</head>
+<body class="bg-[#0B111E] text-[#F8FAFC] font-sans antialiased selection:bg-cyan-500 selection:text-slate-950 flex items-center justify-center min-h-screen">
+<!-- STRICT 1440x900 DESKTOP VIEWPORT WRAPPER -->
+<div class="w-[1440px] max-w-[1440px] min-h-[900px] h-[900px] overflow-hidden flex flex-col bg-[#0B111E] relative border border-[#1E293B] shadow-2xl">
+<!-- TOP APP BAR (h-[56px]) -->
+<header class="h-[56px] min-h-[56px] w-full bg-[#0D1320] border-b border-[#1E293B] px-6 flex items-center justify-between z-30 shrink-0">
+<!-- Left: Breadcrumb / Title -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="text-sm font-semibold text-cyan-400 font-sans">Fraud Detection &amp; Drift Monitoring</span>
+<span class="text-slate-600 text-xs">/</span>
+<h1 class="text-sm font-medium text-slate-100 tracking-normal">Overview Dashboard</h1>
+</div>
+<!-- Cluster / Model Status Badge -->
+<div class="flex items-center gap-2 pl-3 border-l border-[#1E293B]"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-sans bg-cyan-950/40 border border-cyan-800/50 text-cyan-300"><span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>Model: Random Forest (SMOTE)</span><span class="text-xs text-slate-400 font-sans hidden xl:inline-block">Database: MySQL Connected</span></div>
+</div>
+<!-- Center / Search Bar -->
+<div class="flex items-center w-80 bg-[#131D31] border border-[#1E293B] rounded-md px-3 py-1.5 text-xs focus-within:border-cyan-500 transition-colors">
+<span class="material-symbols-outlined text-slate-400 mr-2 text-[16px]">search</span>
+<input class="bg-transparent border-none p-0 text-xs focus:ring-0 text-slate-200 w-full placeholder:text-slate-500 font-sans outline-none" placeholder="Search hash, account, rule..." type="text">
+<kbd class="font-mono text-[10px] text-slate-400 border border-[#223049] px-1 py-0.5 rounded bg-[#0B111E]">⌘K</kbd>
+</div>
+<!-- Right: Quick Retrain Action & Profile Tools -->
+<div class="flex items-center gap-3">
+<button class="bg-[#131D31] hover:bg-[#1A263E] text-slate-300 border border-[#1E293B] transition-colors h-8 px-3 rounded-md text-xs font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-slate-400">download</span>
+        Export Report
+      </button>
+<button class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold transition-colors h-8 px-3.5 rounded-md text-xs flex items-center gap-1.5 shadow-sm shadow-cyan-500/20">
+<span class="material-symbols-outlined text-sm">bolt</span>
+        Trigger Retrain
+      </button>
+<div class="h-4 w-px bg-[#1E293B] mx-1"></div>
+<button class="w-8 h-8 flex items-center justify-center rounded-md text-slate-400 hover:text-slate-200 hover:bg-[#131D31] transition-colors" title="Sync Status">
+<span class="material-symbols-outlined text-[19px]">sync</span>
+</button>
+<button class="relative w-8 h-8 flex items-center justify-center rounded-md text-slate-400 hover:text-slate-200 hover:bg-[#131D31] transition-colors" title="Alerts">
+<span class="material-symbols-outlined text-[19px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-[#0D1320]"></span>
+</button>
+</div>
+</header>
+<!-- BODY CONTENT (Sidebar + Scrollable Viewport) -->
+<div class="flex flex-1 overflow-hidden">
+<!-- SIDEBAR (w-64 / 256px) -->
+<aside class="w-64 min-w-[256px] max-w-[256px] bg-[#0D1320] border-r border-[#1E293B] flex flex-col justify-between p-4 select-none shrink-0 z-20">
+<div class="flex flex-col gap-6">
+<!-- Sentinel Brand Header -->
+<div class="flex items-center gap-2.5 px-2"><div class="w-8 h-8 bg-cyan-500/10 border border-cyan-500/30 rounded-md flex items-center justify-center text-cyan-400"><span class="material-symbols-outlined text-base">shield</span></div><div><div class="text-sm font-bold text-slate-100 leading-tight">Fraud &amp; Drift</div><div class="text-[11px] text-slate-400 font-sans">Student Capstone</div></div></div>
+<!-- Navigation Tabs -->
+<nav class="flex flex-col gap-1">
+<!-- Overview Active -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-md bg-cyan-500/10 text-cyan-300 font-medium text-xs border border-cyan-500/20" href="#">
+<span class="material-symbols-outlined text-cyan-400 text-[18px]">dashboard</span>
+<span class="">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-[#131D31] text-xs transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+<span class="">Transactions</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-[#131D31] text-xs transition-colors" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span class="">Alerts</span>
+</div>
+<span class="bg-red-950/80 border border-red-800/60 text-red-400 px-1.5 py-0.2 rounded font-mono text-[10px] font-semibold">3</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-[#131D31] text-xs transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">fact_check</span>
+<span class="">Cases</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-[#131D31] text-xs transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">health_and_safety</span>
+<span class="">Model Health</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-[#131D31] text-xs transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">ssid_chart</span>
+<span class="">Drift Monitoring</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-[#131D31] text-xs transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">manage_accounts</span>
+<span class="">Admin &amp; Users</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-slate-200 hover:bg-[#131D31] text-xs transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="">Settings</span>
+</a>
+</nav>
+</div>
+<!-- Bottom User Profile Badge & Emergency Stop -->
+<div class="flex flex-col gap-3 pt-3 border-t border-[#1E293B]">
+<div class="flex items-center justify-between px-2.5 py-2 rounded-md bg-[#131D31] border border-[#1E293B]">
+<div class="flex items-center gap-2.5 truncate">
+<div class="w-7 h-7 rounded-full bg-cyan-950 border border-cyan-700/50 flex items-center justify-center text-cyan-300 font-semibold text-xs">
+              RA
+            </div>
+<div class="truncate text-left">
+<div class="text-xs font-medium text-slate-200 truncate">Logged in as: Analyst</div>
+<div class="text-[10px] text-slate-500 font-mono">analyst@sentinelml.io</div>
+</div>
+</div>
+<span class="w-2 h-2 rounded-full bg-emerald-500" title="Online"></span>
+</div>
+<div class="w-full bg-[#131D31] border border-[#1E293B] text-slate-300 text-xs font-sans py-1.5 px-3 rounded flex items-center justify-between"><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400"></span>Backend: FastAPI</span><span class="text-[11px] font-mono text-slate-400">Port 8000</span></div>
+</div>
+</aside>
+<!-- MAIN SCROLLABLE VIEWPORT (h-[calc(900px-56px)] overflow-y-auto p-6) -->
+<main class="flex-1 h-[calc(900px-56px)] overflow-y-auto p-6 flex flex-col gap-6 bg-[#0B111E]">
+<!-- LIVE STREAM STATUS STRIP -->
+<div class="flex items-center justify-between bg-[#131D31] border border-[#1E293B] px-4 py-2 rounded-lg text-xs"><div class="flex items-center gap-3"><span class="relative flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span></span><span class="font-medium text-slate-200">Batch &amp; Stream Pipeline Active</span><span class="text-slate-500">•</span><span class="text-cyan-400 font-sans">API Ingestion: 42 req/min</span><span class="text-slate-500">•</span><span class="text-slate-300 font-sans">Response Time: 34ms</span></div><div class="flex items-center gap-4 text-slate-400 text-xs"><div class="">Last Evaluation: <span class="text-slate-200 font-medium font-mono">14:28 UTC</span></div><div class="h-3 w-px bg-[#1E293B]"></div><div class="flex items-center gap-1.5 text-slate-300"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span class="">Worker Ready</span></div></div></div>
+<!-- METRIC CARDS ROW (4 SLEEK CARDS) -->
+<section class="grid grid-cols-4 gap-5"><div class="bg-[#131D31] border border-[#1E293B] rounded-lg p-4 flex flex-col justify-between hover:border-slate-700 transition-colors"><div class="flex items-center justify-between"><span class="text-xs font-medium text-slate-400">Total Transactions</span><span class="material-symbols-outlined text-slate-500 text-base">receipt_long</span></div><div class="my-2 flex items-baseline justify-between"><span class="text-2xl font-bold font-sans text-slate-100">14,820</span><div class="flex items-center text-slate-300 text-xs font-medium font-sans">Test Dataset</div></div><div class="flex items-center justify-between border-t border-[#1E293B] pt-2 text-xs font-sans text-slate-400"><span class="">Validation Cohort</span><span class="text-slate-300 font-mono">80/20 Split</span></div></div><div class="bg-[#131D31] border border-[#1E293B] rounded-lg p-4 flex flex-col justify-between hover:border-red-900/50 transition-colors"><div class="flex items-center justify-between"><span class="text-xs font-medium text-slate-400">Flagged Suspicious</span><span class="inline-flex items-center gap-1 bg-red-950/70 border border-red-800/60 text-red-400 text-[10px] font-semibold px-2 py-0.5 rounded font-sans"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Flagged</span></div><div class="my-2 flex items-baseline justify-between"><div class="flex items-baseline gap-1.5"><span class="text-2xl font-bold font-sans text-red-400">184</span><span class="text-xs text-slate-400 font-sans">txs</span></div><span class="text-xs text-slate-400 font-sans">1.24% of set</span></div><div class="flex items-center justify-between border-t border-[#1E293B] pt-2 text-xs font-sans"><span class="text-red-400 font-medium">142 True Positives</span><span class="text-slate-400">42 In Review</span></div></div><div class="bg-[#131D31] border border-[#1E293B] rounded-lg p-4 flex flex-col justify-between hover:border-amber-900/50 transition-colors"><div class="flex items-center justify-between"><span class="text-xs font-medium text-slate-400">Fraud Rate</span><span class="text-[11px] font-sans text-slate-400 bg-[#0B111E] px-1.5 py-0.5 rounded border border-[#1E293B]">Baseline: 1.20%</span></div><div class="my-2 flex items-baseline justify-between"><span class="text-2xl font-bold font-sans text-amber-400">1.24%</span><span class="inline-flex items-center gap-1 bg-amber-950/70 text-amber-300 border border-amber-800/60 px-2 py-0.5 rounded text-[10px] font-sans font-medium"><span class="material-symbols-outlined text-[12px]">check_circle</span> In Bounds</span></div><div class="flex items-center justify-between border-t border-[#1E293B] pt-2 text-xs font-sans text-slate-400"><span class="">Sample Variance: <strong class="text-slate-200 font-medium">+0.04%</strong></span><span class="">Threshold: 1.50%</span></div></div><div class="bg-[#131D31] border border-[#1E293B] rounded-lg p-4 flex flex-col justify-between hover:border-emerald-900/50 transition-colors"><div class="flex items-center justify-between"><span class="text-xs font-medium text-slate-400">Model Performance</span><span class="inline-flex items-center gap-1 bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 px-2 py-0.5 rounded text-[10px] font-sans font-medium"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Random Forest</span></div><div class="my-2 flex items-baseline justify-between"><span class="text-sm font-semibold text-slate-100 truncate font-sans">Scikit-Learn v1.3</span><span class="text-[11px] text-emerald-400 bg-[#0B111E] px-1.5 py-0.5 rounded border border-[#1E293B] font-sans">PSI 0.082 Stable</span></div><div class="grid grid-cols-3 gap-1.5 border-t border-[#1E293B] pt-2 text-center font-sans"><div class="bg-[#0B111E] py-1 rounded border border-[#1E293B]"><div class="text-[9px] uppercase text-slate-400 font-sans">Precision</div><div class="text-xs font-semibold text-slate-200">92.4%</div></div><div class="bg-[#0B111E] py-1 rounded border border-[#1E293B]"><div class="text-[9px] uppercase text-slate-400 font-sans">Recall</div><div class="text-xs font-semibold text-slate-200">88.1%</div></div><div class="bg-[#0B111E] py-1 rounded border border-[#1E293B]"><div class="text-[9px] uppercase text-slate-400 font-sans">F2 Score</div><div class="text-xs font-semibold text-cyan-400">0.898</div></div></div></div></section>
+<!-- MIDDLE GRID: 60% Left (Chart) / 40% Right (PSI Gauge) -->
+<section class="grid grid-cols-12 gap-5">
+<!-- LEFT: Transaction Volume vs Fraud Score Curve (60% / 7 cols in 12-grid ~ 58-60%) -->
+<div class="col-span-7 bg-[#131D31] border border-[#1E293B] rounded-lg p-5 flex flex-col justify-between">
+<div class="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+<div>
+<h2 class="text-sm font-bold text-slate-100">Transaction Volume vs Fraud Score Curve</h2>
+<p class="text-xs text-slate-400 font-sans">Dual-axis correlation with classification threshold cutoff (Threshold = 0.700)</p>
+</div>
+<div class="flex items-center gap-1 bg-[#0B111E] p-1 rounded-md border border-[#1E293B]">
+<button class="px-2.5 py-0.5 text-xs text-slate-400 hover:text-slate-200 rounded">1h</button>
+<button class="px-2.5 py-0.5 text-xs text-slate-400 hover:text-slate-200 rounded">6h</button>
+<button class="px-2.5 py-0.5 text-xs font-semibold bg-[#1E293B] text-cyan-300 rounded shadow-sm">24h</button>
+<button class="px-2.5 py-0.5 text-xs text-slate-400 hover:text-slate-200 rounded">7d</button>
+</div>
+</div>
+<!-- Chart Area -->
+<div class="relative w-full h-56 mt-3 flex flex-col justify-end">
+<!-- Legend bar -->
+<div class="absolute top-0 right-0 flex items-center gap-4 text-[11px] font-mono">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-2.5 bg-[#1E293B] border border-slate-600 inline-block rounded-xs"></span>
+<span class="text-slate-400">Ingestion Vol (bars)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-cyan-400 inline-block"></span>
+<span class="text-slate-300">Mean Fraud Score</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-red-500 border-dashed border-t inline-block"></span>
+<span class="text-red-400 font-medium">0.70 Cutoff</span>
+</div>
+</div>
+<!-- SVG Graph -->
+<svg class="w-full h-44 overflow-visible" preserveAspectRatio="none" viewBox="0 0 620 160">
+<defs>
+<linearGradient id="volBar" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#334155" stop-opacity="0.75"></stop>
+<stop offset="100%" stop-color="#1E293B" stop-opacity="0.2"></stop>
+</linearGradient>
+</defs>
+<!-- Gridlines -->
+<line stroke="#1E293B" stroke-width="1" x1="30" x2="600" y1="20" y2="20"></line>
+<line stroke="#1E293B" stroke-width="1" x1="30" x2="600" y1="60" y2="60"></line>
+<line stroke="#1E293B" stroke-width="1" x1="30" x2="600" y1="100" y2="100"></line>
+<line stroke="#1E293B" stroke-width="1" x1="30" x2="600" y1="140" y2="140"></line>
+<!-- Ingestion Volume Bars -->
+<rect fill="url(#volBar)" height="80" stroke="#334155" stroke-width="0.5" width="16" x="40" y="60"></rect>
+<rect fill="url(#volBar)" height="90" stroke="#334155" stroke-width="0.5" width="16" x="72" y="50"></rect>
+<rect fill="url(#volBar)" height="105" stroke="#334155" stroke-width="0.5" width="16" x="104" y="35"></rect>
+<rect fill="url(#volBar)" height="110" stroke="#334155" stroke-width="0.5" width="16" x="136" y="30"></rect>
+<rect fill="url(#volBar)" height="85" stroke="#334155" stroke-width="0.5" width="16" x="168" y="55"></rect>
+<rect fill="url(#volBar)" height="75" stroke="#334155" stroke-width="0.5" width="16" x="200" y="65"></rect>
+<rect fill="url(#volBar)" height="95" stroke="#334155" stroke-width="0.5" width="16" x="232" y="45"></rect>
+<rect fill="url(#volBar)" height="115" stroke="#334155" stroke-width="0.5" width="16" x="264" y="25"></rect>
+<rect fill="url(#volBar)" height="120" stroke="#334155" stroke-width="0.5" width="16" x="296" y="20"></rect>
+<rect fill="url(#volBar)" height="100" stroke="#334155" stroke-width="0.5" width="16" x="328" y="40"></rect>
+<rect fill="url(#volBar)" height="80" stroke="#334155" stroke-width="0.5" width="16" x="360" y="60"></rect>
+<rect fill="url(#volBar)" height="95" stroke="#334155" stroke-width="0.5" width="16" x="392" y="45"></rect>
+<rect fill="url(#volBar)" height="110" stroke="#334155" stroke-width="0.5" width="16" x="424" y="30"></rect>
+<rect fill="url(#volBar)" height="125" stroke="#334155" stroke-width="0.5" width="16" x="456" y="15"></rect>
+<rect fill="url(#volBar)" height="115" stroke="#334155" stroke-width="0.5" width="16" x="488" y="25"></rect>
+<rect fill="url(#volBar)" height="105" stroke="#334155" stroke-width="0.5" width="16" x="520" y="35"></rect>
+<rect fill="url(#volBar)" height="90" stroke="#334155" stroke-width="0.5" width="16" x="552" y="50"></rect>
+<!-- Dynamic 0.75 Cutoff Line -->
+<line stroke="#EF4444" stroke-dasharray="4 3" stroke-width="1.5" x1="30" x2="600" y1="45" y2="45"></line>
+<text fill="#EF4444" font-family="JetBrains Mono" font-size="10" font-weight="600" x="515" y="40">CUTOFF: 0.70</text>
+<!-- Smooth Cyan Spline (Mean Fraud Score) -->
+<path d="M 40,115 Q 104,110 168,90 T 296,68 T 424,35 T 520,48 T 580,72" fill="none" stroke="#06B6D4" stroke-width="2.5"></path>
+<!-- Spike highlight -->
+<circle cx="424" cy="35" fill="#EF4444" r="4" stroke="#0B111E" stroke-width="2"></circle>
+<rect fill="#080E1B" height="18" rx="3" stroke="#223049" stroke-width="1" width="95" x="375" y="10"></rect>
+<text fill="#F8FAFC" font-family="JetBrains Mono" font-size="9" font-weight="500" x="382" y="22">Peak: 0.824</text>
+</svg>
+<!-- Bottom Time Axis -->
+<div class="flex justify-between pl-8 pr-4 text-[11px] font-mono text-slate-500 border-t border-[#1E293B] pt-1">
+<span class="">00:00 UTC</span>
+<span class="">04:00 UTC</span>
+<span class="">08:00 UTC</span>
+<span class="">12:00 UTC</span>
+<span class="">16:00 UTC</span>
+<span class="">20:00 UTC</span>
+<span class="text-cyan-400 font-semibold">NOW</span>
+</div>
+</div>
+</div>
+<!-- RIGHT: Population Stability Index (PSI) (40% / 5 cols in 12-grid ~ 40-42%) -->
+<div class="col-span-5 bg-[#131D31] border border-[#1E293B] rounded-lg p-5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-3 border-b border-[#1E293B]">
+<div>
+<h2 class="text-sm font-bold text-slate-100">Population Stability Index (PSI)</h2>
+<p class="text-xs text-slate-400">Baseline cohort: 30-day validated window</p>
+</div>
+<span class="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 font-medium">
+                0.082 STABLE
+              </span>
+</div>
+<!-- Clean Gauge & Range Indicator -->
+<div class="py-3 flex items-center justify-center gap-6">
+<div class="relative flex items-center justify-center">
+<svg class="w-20 h-20 transform -rotate-90">
+<circle cx="40" cy="40" fill="transparent" r="32" stroke="#1E293B" stroke-width="7"></circle>
+<circle cx="40" cy="40" fill="transparent" r="32" stroke="#10B981" stroke-dasharray="201" stroke-dashoffset="150" stroke-linecap="round" stroke-width="7"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-base font-bold font-mono text-slate-100">0.082</span>
+<span class="text-[8px] uppercase tracking-wider text-slate-400 font-semibold">PSI Score</span>
+</div>
+</div>
+<div class="flex flex-col gap-1 text-[11px] font-mono">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-slate-200 font-medium">&lt; 0.10: Stable</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span>
+<span class="text-slate-400">0.10 - 0.25: Moderate</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-red-400"></span>
+<span class="text-slate-400">&gt; 0.25: Severe Drift</span>
+</div>
+</div>
+</div>
+<!-- Top Drifted Features List -->
+<div class="flex flex-col gap-2 mt-1"><span class="text-[11px] font-semibold text-slate-400 font-sans">Top Drifted Features</span><div class="bg-[#0B111E] p-2 rounded border border-[#1E293B] flex flex-col gap-1"><div class="flex items-center justify-between text-xs font-sans"><span class="text-slate-200 font-medium font-mono truncate">amt_ratio_to_avg</span><span class="text-amber-400 text-[11px] font-semibold font-sans">PSI 0.14 • Moderate</span></div><div class="w-full bg-[#1E293B] h-1.5 rounded-full overflow-hidden"><div class="bg-amber-400 w-[56%] h-full"></div></div></div><div class="bg-[#0B111E] p-2 rounded border border-[#1E293B] flex flex-col gap-1"><div class="flex items-center justify-between text-xs font-sans"><span class="text-slate-200 font-medium font-mono truncate">distance_from_home</span><span class="text-emerald-400 text-[11px] font-semibold font-sans">PSI 0.04 • Stable</span></div><div class="w-full bg-[#1E293B] h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-400 w-[18%] h-full"></div></div></div><div class="bg-[#0B111E] p-2 rounded border border-[#1E293B] flex flex-col gap-1"><div class="flex items-center justify-between text-xs font-sans"><span class="text-slate-200 font-medium font-mono truncate">transaction_velocity</span><span class="text-emerald-400 text-[11px] font-semibold font-sans">PSI 0.03 • Stable</span></div><div class="w-full bg-[#1E293B] h-1.5 rounded-full overflow-hidden"><div class="bg-emerald-400 w-[14%] h-full"></div></div></div></div>
+</div>
+<button class="mt-2 w-full py-1 text-xs border border-[#1E293B] rounded hover:bg-[#1A263E] text-slate-300 flex items-center justify-center gap-1 transition-colors">
+<span class="">View All 48 Features</span>
+<span class="material-symbols-outlined text-xs">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- BOTTOM GRID: 65% Left (Transactions Table) / 35% Right (Alerts Feed) -->
+<section class="grid grid-cols-12 gap-5 mb-2">
+<!-- LEFT: Recent High-Risk Transactions (65% ~ 8 cols) -->
+<div class="col-span-8 bg-[#131D31] border border-[#1E293B] rounded-lg p-5 flex flex-col">
+<div class="flex items-center justify-between pb-3 border-b border-[#1E293B] mb-3">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+<h2 class="text-sm font-bold text-slate-100">Recent High-Risk Transactions</h2>
+<span class="text-[11px] font-mono text-red-400 bg-red-950/60 border border-red-800/60 px-2 py-0.5 rounded">Action Required</span>
+</div>
+<a class="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors" href="#">
+<span class="">View All In Queue</span>
+<span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
+</div>
+<!-- Structured Readable Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="bg-[#0B111E] border-b border-[#1E293B] text-slate-400 font-mono uppercase text-[11px]">
+<th class="py-2.5 px-3">Tx Hash</th>
+<th class="py-2.5 px-3">Timestamp</th>
+<th class="py-2.5 px-3">Account ID</th>
+<th class="py-2.5 px-3 text-right">Amount</th>
+<th class="py-2.5 px-3">Channel</th>
+<th class="py-2.5 px-3 text-center">Score</th>
+<th class="py-2.5 px-3 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#1E293B] font-mono"><tr class="hover:bg-[#1A263E]/50 transition-colors"><td class="py-2.5 px-3 font-semibold text-cyan-400 font-mono">TX-849201</td><td class="py-2.5 px-3 text-slate-400 font-mono text-[11px]">14:28:11 UTC</td><td class="py-2.5 px-3 text-slate-200 font-mono">USR-99201</td><td class="py-2.5 px-3 text-right font-medium text-slate-100 font-sans">$2,450.00</td><td class="py-2.5 px-3 text-slate-300 font-sans">Online Transfer</td><td class="py-2.5 px-3 text-center"><span class="bg-red-950 border border-red-700/80 text-red-400 px-2 py-0.5 rounded font-medium text-[11px] font-sans">0.94</span></td><td class="py-2.5 px-3 text-right font-sans"><button class="bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 text-cyan-300 px-2.5 py-1 rounded text-xs transition-colors font-medium">Inspect Case</button></td></tr><tr class="hover:bg-[#1A263E]/50 transition-colors bg-[#0B111E]/30"><td class="py-2.5 px-3 font-semibold text-cyan-400 font-mono">TX-849188</td><td class="py-2.5 px-3 text-slate-400 font-mono text-[11px]">14:27:54 UTC</td><td class="py-2.5 px-3 text-slate-200 font-mono">USR-10845</td><td class="py-2.5 px-3 text-right font-medium text-slate-100 font-sans">$890.00</td><td class="py-2.5 px-3 text-slate-300 font-sans">Card Not Present</td><td class="py-2.5 px-3 text-center"><span class="bg-red-950 border border-red-700/80 text-red-400 px-2 py-0.5 rounded font-medium text-[11px] font-sans">0.88</span></td><td class="py-2.5 px-3 text-right font-sans"><button class="bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 text-cyan-300 px-2.5 py-1 rounded text-xs transition-colors font-medium">Inspect Case</button></td></tr><tr class="hover:bg-[#1A263E]/50 transition-colors"><td class="py-2.5 px-3 font-semibold text-cyan-400 font-mono">TX-849142</td><td class="py-2.5 px-3 text-slate-400 font-mono text-[11px]">14:26:40 UTC</td><td class="py-2.5 px-3 text-slate-200 font-mono">USR-77410</td><td class="py-2.5 px-3 text-right font-medium text-slate-100 font-sans">$1,299.99</td><td class="py-2.5 px-3 text-slate-300 font-sans">POS International</td><td class="py-2.5 px-3 text-center"><span class="bg-red-950 border border-red-700/80 text-red-400 px-2 py-0.5 rounded font-medium text-[11px] font-sans">0.85</span></td><td class="py-2.5 px-3 text-right font-sans"><button class="bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 text-cyan-300 px-2.5 py-1 rounded text-xs transition-colors font-medium">Inspect Case</button></td></tr><tr class="hover:bg-[#1A263E]/50 transition-colors bg-[#0B111E]/30"><td class="py-2.5 px-3 font-semibold text-cyan-400 font-mono">TX-849095</td><td class="py-2.5 px-3 text-slate-400 font-mono text-[11px]">14:25:19 UTC</td><td class="py-2.5 px-3 text-slate-200 font-mono">USR-33190</td><td class="py-2.5 px-3 text-right font-medium text-slate-100 font-sans">$620.50</td><td class="py-2.5 px-3 text-slate-300 font-sans">ATM Withdrawal</td><td class="py-2.5 px-3 text-center"><span class="bg-red-950 border border-red-700/80 text-red-400 px-2 py-0.5 rounded font-medium text-[11px] font-sans">0.79</span></td><td class="py-2.5 px-3 text-right font-sans"><button class="bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 text-cyan-300 px-2.5 py-1 rounded text-xs transition-colors font-medium">Inspect Case</button></td></tr></tbody>
+</table>
+</div>
+</div>
+<!-- RIGHT: Active Risk & Drift Alerts (35% ~ 4 cols) -->
+<div class="col-span-4 bg-[#131D31] border border-[#1E293B] rounded-lg p-5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-3 border-b border-[#1E293B] mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">notifications_active</span>
+<h2 class="text-sm font-bold text-slate-100">Active Risk &amp; Drift Alerts</h2>
+</div>
+<span class="bg-[#0B111E] text-slate-400 border border-[#1E293B] px-2 py-0.5 rounded text-xs font-mono">3 Open</span>
+</div>
+<!-- Alerts Stream -->
+<div class="flex flex-col gap-2.5"><div class="p-2.5 bg-[#0B111E] border-l-2 border-l-amber-500 border border-[#1E293B] rounded flex flex-col gap-1.5"><div class="flex items-center justify-between"><span class="bg-amber-950/80 border border-amber-800/70 text-amber-300 px-1.5 py-0.2 rounded font-sans text-[10px] font-semibold uppercase">DRIFT WARNING</span><span class="text-[10px] font-mono text-slate-400">12m ago</span></div><div class="text-xs text-slate-200 leading-snug font-sans">Moderate drift detected on <code class="font-mono text-cyan-300">amt_ratio_to_avg</code> (PSI: 0.14).</div><div class="flex items-center justify-between pt-1 border-t border-[#1E293B] text-[11px] font-sans"><span class="text-slate-400">Covariate Shift</span><button class="bg-[#131D31] hover:bg-[#1E293B] text-slate-300 border border-[#1E293B] px-2 py-0.5 rounded text-[11px] transition-colors">Inspect</button></div></div><div class="p-2.5 bg-[#0B111E] border-l-2 border-l-red-500 border border-[#1E293B] rounded flex flex-col gap-1.5"><div class="flex items-center justify-between"><span class="bg-red-950 text-red-400 border border-red-800/70 px-1.5 py-0.2 rounded font-sans text-[10px] font-bold uppercase">EVALUATION</span><span class="text-[10px] font-mono text-slate-400">45m ago</span></div><div class="text-xs text-slate-200 leading-snug font-sans">Recall dipped below 90% threshold on card-not-present test split (88.1%).</div><div class="flex items-center justify-between pt-1 border-t border-[#1E293B] text-[11px] font-sans"><span class="text-slate-400">Delta: -1.9%</span><button class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold px-2 py-0.5 rounded text-[11px] transition-colors">Review Split</button></div></div><div class="p-2.5 bg-[#0B111E] border-l-2 border-l-cyan-400 border border-[#1E293B] rounded flex flex-col gap-1.5"><div class="flex items-center justify-between"><span class="bg-cyan-950/60 border border-cyan-800/60 text-cyan-400 px-1.5 py-0.2 rounded font-sans text-[10px] font-semibold uppercase">SYSTEM INFO</span><span class="text-[10px] font-mono text-slate-400">2h ago</span></div><div class="text-xs text-slate-200 leading-snug font-sans">SMOTE re-sampling pipeline finished. Synthetic fraud samples added: 1,420.</div><div class="flex items-center justify-between pt-1 border-t border-[#1E293B] text-[11px] font-sans"><span class="text-slate-400">Preprocessing Step</span><button class="text-cyan-400 hover:underline text-[11px]">Dismiss</button></div></div></div>
+</div>
+<div class="pt-2 border-t border-[#1E293B] mt-2 flex items-center justify-between text-xs text-slate-400">
+<span class="font-mono text-[10px]">WebSocket Stream: Active</span>
+<a class="text-cyan-400 hover:underline flex items-center gap-0.5 text-xs" href="#">
+<span class="">Alert History</span>
+<span class="material-symbols-outlined text-[14px]">history</span>
+</a>
+</div>
+</div>
+</section>
+</main>
+</div>
+</div>
+
+
+</body></html>

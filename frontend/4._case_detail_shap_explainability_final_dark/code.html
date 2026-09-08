@@ -1,0 +1,180 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Case Review TX-984218 | Fraud Detection &amp; Drift Monitoring System</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            background: "#0B111E",
+            surface: "#131D31",
+            "surface-container": "#162238",
+            "surface-container-low": "#0F172A",
+            "surface-container-highest": "#1E293B",
+            "outline-variant": "#1E293B",
+            "on-surface": "#F8FAFC",
+            "on-surface-variant": "#94A3B8",
+            primary: "#06B6D4",
+            "primary-container": "#0891B2",
+            "on-primary": "#082F49",
+            secondary: "#14B8A6",
+            error: "#EF4444",
+            "error-container": "#450A0A"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased flex items-center justify-center min-h-screen">
+<!-- Fixed 1440x900 App Canvas Frame -->
+<div class="w-[1440px] max-w-[1440px] h-[900px] overflow-hidden flex bg-background border border-outline-variant shadow-2xl relative">
+<!-- Unified Shell Sidebar (w-64) -->
+<aside class="w-64 h-full flex-shrink-0 flex flex-col justify-between bg-surface-container-low border-r border-outline-variant select-none">
+<div class="flex flex-col">
+<!-- Logo & Header -->
+<div class="h-14 flex items-center px-5 border-b border-outline-variant space-x-3">
+<div class="w-8 h-8 rounded-lg bg-primary/20 border border-primary/40 flex items-center justify-center text-primary shadow-sm shadow-primary/10">
+<span class="material-symbols-outlined text-[20px]" data-icon="shield">shield</span>
+</div>
+<div>
+<div class="text-sm font-bold text-white tracking-tight flex items-center space-x-1.5">
+<span class="">SentinelML</span>
+<span class="text-[9px] font-mono px-1 py-0.5 rounded bg-cyan-950 text-primary border border-primary/30">ML-SEC</span>
+</div>
+<div class="text-[11px] font-mono text-on-surface-variant">Model Defense v2.4</div>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<nav class="p-3 space-y-1">
+<a class="flex items-center space-x-3 px-3 py-2 text-xs font-medium text-on-surface-variant hover:text-white hover:bg-surface-container rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="dashboard">dashboard</span>
+<span class="">Overview</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-xs font-medium text-on-surface-variant hover:text-white hover:bg-surface-container rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="receipt_long">receipt_long</span>
+<span class="">Transactions</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-xs font-medium text-on-surface-variant hover:text-white hover:bg-surface-container rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="warning">warning</span>
+<span class="">Alerts</span>
+</a>
+<!-- Active Tab: Cases -->
+<a class="flex items-center space-x-3 px-3 py-2 text-xs font-semibold text-primary bg-primary/10 border-r-2 border-primary rounded-l-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="fact_check" style="font-variation-settings: 'FILL' 1;">fact_check</span>
+<span class="">Cases</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-xs font-medium text-on-surface-variant hover:text-white hover:bg-surface-container rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="health_and_safety">health_and_safety</span>
+<span class="">Model Health</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-xs font-medium text-on-surface-variant hover:text-white hover:bg-surface-container rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="ssid_chart">ssid_chart</span>
+<span class="">Drift Monitoring</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-xs font-medium text-on-surface-variant hover:text-white hover:bg-surface-container rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="manage_accounts">manage_accounts</span>
+<span class="">User Management</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-xs font-medium text-on-surface-variant hover:text-white hover:bg-surface-container rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="tune">tune</span>
+<span class="">Settings</span>
+</a>
+</nav>
+</div>
+<!-- User Profile & Health Status -->
+<div class="p-3 border-t border-outline-variant space-y-2">
+<div class="p-2 bg-surface-container rounded border border-outline-variant flex items-center justify-between text-[11px] font-mono"><span class="flex items-center space-x-1.5 text-emerald-400 font-sans text-xs"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span class="">FastAPI Backend</span></span><span class="text-slate-400 font-mono text-[11px]">MySQL Connected</span></div>
+<div class="flex items-center space-x-2.5 px-2 py-1.5">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center text-primary font-bold text-xs">
+            SK
+          </div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-white">S. Kowalski</span>
+<span class="text-[11px] text-on-surface-variant">Logged in as: Analyst</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Section (Topbar + Scrollable Area) -->
+<div class="flex-1 flex flex-col h-full overflow-hidden">
+<!-- Unified Shell Topbar (h-14 / 56px) -->
+<header class="h-14 px-6 bg-surface-container-low border-b border-outline-variant flex items-center justify-between flex-shrink-0">
+<!-- Breadcrumbs & Quick Back -->
+<div class="flex items-center space-x-3">
+<a class="inline-flex items-center space-x-1 px-2.5 py-1 text-xs font-medium text-on-surface-variant hover:text-white bg-surface-container hover:bg-surface-container-highest border border-outline-variant rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-[15px]" data-icon="arrow_back">arrow_back</span>
+<span class="">Back to Transactions</span>
+</a>
+<span class="text-outline-variant">/</span>
+<nav class="flex items-center space-x-1.5 text-xs text-on-surface-variant font-mono">
+<a class="hover:text-primary transition-colors" href="#">Transactions</a>
+<span class="">/</span>
+<span class="text-white font-medium">TX-984218-ECOM</span>
+<span class="">/</span>
+<span class="text-primary font-semibold">Case Investigation</span>
+</nav>
+</div>
+<!-- Live Cluster Pill & Quick Status -->
+<div class="flex items-center space-x-3"><div class="flex items-center space-x-2 px-2.5 py-1 rounded bg-surface-container border border-outline-variant text-xs"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span class="text-on-surface font-medium">Academic Project (FastAPI + MySQL)</span><span class="text-slate-500">|</span><span class="text-on-surface-variant font-mono text-[11px]">RF-SMOTE v1.0</span></div><div class="h-4 w-px bg-outline-variant"></div><span class="text-xs font-mono text-slate-400">14:38:09 UTC</span></div>
+</header>
+<!-- Scrollable Content Area: h-[calc(900px-56px)] -->
+<div class="h-[calc(900px-56px)] overflow-y-auto p-6 space-y-5">
+<!-- Action Bar Ribbon -->
+<section class="bg-surface border border-outline-variant rounded-lg p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+<div class="flex flex-wrap items-center gap-3"><h1 class="text-lg font-semibold text-white tracking-normal flex items-center space-x-2"><span class="">Case Review:</span><span class="font-mono font-medium text-primary">TX-984218</span></h1><span class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full border border-red-500/50 bg-red-950/40 text-red-300 text-xs font-medium"><span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span><span class="">Flagged by Model (Score: 0.842)</span></span></div>
+<!-- Action Buttons -->
+<div class="flex items-center space-x-2.5">
+<button class="h-8 px-3.5 bg-red-600 hover:bg-red-500 text-white rounded text-xs font-semibold flex items-center space-x-1.5 shadow transition-colors">
+<span class="material-symbols-outlined text-[15px]" data-icon="gavel">gavel</span>
+<span class="">Confirm Fraud &amp; Block</span>
+</button>
+<button class="h-8 px-3 bg-surface-container hover:bg-emerald-950/40 text-emerald-300 border border-emerald-500/40 rounded text-xs font-medium flex items-center space-x-1.5 transition-colors">
+<span class="material-symbols-outlined text-[15px] text-emerald-400" data-icon="check_circle">check_circle</span>
+<span class="">Dismiss as Legitimate</span>
+</button>
+<button class="h-8 px-3 bg-transparent hover:bg-cyan-950/30 text-primary border border-primary/60 rounded text-xs font-medium flex items-center space-x-1.5 transition-colors">
+<span class="material-symbols-outlined text-[15px]" data-icon="science">science</span>
+<span class="">Re-score with Challenger Model</span>
+</button>
+</div>
+</section>
+<!-- Two-Column Layout (45% / 55%) -->
+<main class="grid grid-cols-1 lg:grid-cols-10 gap-5 items-start">
+<!-- LEFT COLUMN (45% => 4.5/10 ~ cols 1-4.5, approx 4 cols in a 9 or 10-grid: here 4 cols vs 6 cols or 9 col split) -->
+<!-- Using 10 cols grid: left is 4.5 approx 4 cols lg:col-span-4 / 5 col or 45% using flex/w or lg:grid-cols-20 -->
+<div class="lg:col-span-4 flex flex-col space-y-5">
+<!-- Card 1: Core Transaction Metadata -->
+<article class="bg-surface border border-outline-variant rounded-lg p-4 shadow-sm space-y-3"><div class="flex items-center justify-between pb-2 border-b border-outline-variant"><div class="flex items-center space-x-2"><span class="material-symbols-outlined text-primary text-[18px]">receipt_long</span><h2 class="text-xs font-semibold text-white">Core Transaction Metadata</h2></div><span class="text-[11px] font-mono text-slate-400">2024-03-28 14:32:11</span></div><div class="p-3 bg-surface-container-low border border-outline-variant rounded flex items-center justify-between"><div><span class="text-xs text-on-surface-variant block">Transaction Amount</span><div class="text-2xl font-bold text-white tracking-tight">$1,245.00 <span class="text-xs font-normal text-on-surface-variant font-mono">USD</span></div></div><div class="text-right"><span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded bg-red-950/60 border border-red-800 text-red-300 font-medium text-xs"><span class="material-symbols-outlined text-[13px]">warning</span><span class="">3.4x Typical Size</span></span><span class="text-xs text-slate-400 block mt-1 font-mono">Visa Ending in 4111</span></div></div><div class="space-y-2 text-xs"><div class="flex justify-between py-1 border-b border-outline-variant/60"><span class="text-on-surface-variant">Merchant</span><span class="font-medium text-white text-right">Online Retailer (Digital Goods)</span></div><div class="flex justify-between py-1 border-b border-outline-variant/60"><span class="text-on-surface-variant">Channel</span><span class="text-slate-200">Web Browser (Checkout)</span></div><div class="flex justify-between py-1 border-b border-outline-variant/60"><span class="text-on-surface-variant">Time of Transaction</span><span class="text-amber-300 font-medium font-mono">03:32 AM (Unusual Local Window)</span></div><div class="pt-1"><div class="p-2.5 bg-surface-container-low border border-outline-variant rounded flex items-start justify-between"><div><span class="text-xs font-medium text-slate-200 flex items-center space-x-1"><span class="material-symbols-outlined text-[14px] text-primary">location_on</span><span class="">Distance from Billing Zip</span></span><span class="text-xs text-on-surface-variant block mt-0.5">Shipping address 480 km away from registered card location</span></div><span class="px-1.5 py-0.5 bg-amber-950/40 border border-amber-500/40 text-amber-300 rounded text-xs font-medium">Mismatch</span></div></div></div></article>
+<!-- Card 2: Historical Account Profile -->
+<article class="bg-surface border border-outline-variant rounded-lg p-4 shadow-sm space-y-3"><div class="flex items-center justify-between pb-2 border-b border-outline-variant"><div class="flex items-center space-x-2"><span class="material-symbols-outlined text-primary text-[18px]">account_balance</span><h2 class="text-xs font-semibold text-white">Historical Account Profile</h2></div><span class="text-[11px] font-mono text-slate-400">ACC-USER-77341</span></div><div class="grid grid-cols-3 gap-2 text-center"><div class="p-2.5 bg-surface-container-low rounded border border-outline-variant"><span class="text-xs text-on-surface-variant block">Account Age</span><div class="text-base font-semibold text-white mt-1 font-mono">420 <span class="text-xs font-normal text-slate-400 font-sans">days</span></div><span class="text-xs text-emerald-400">Established</span></div><div class="p-2.5 bg-surface-container-low rounded border border-outline-variant"><span class="text-xs text-on-surface-variant block">Avg 30d Volume</span><div class="text-base font-semibold text-white mt-1 font-mono">$142.50</div><span class="text-xs text-slate-400">Monthly Mean</span></div><div class="p-2.5 bg-red-950/30 rounded border border-red-900/60"><span class="text-xs text-red-300 block font-medium">Velocity Spike</span><div class="text-base font-semibold text-red-400 mt-1 font-mono">4.8x</div><span class="text-xs text-red-300">Tx / 24h</span></div></div><div class="p-2.5 bg-surface-container-low rounded border border-outline-variant text-xs text-on-surface-variant flex items-start space-x-2"><span class="material-symbols-outlined text-[15px] text-primary mt-0.5">info</span><p class="leading-relaxed text-xs">Customer typically orders books &amp; small merchandise under $50.00. Current purchase ($1,245.00) deviates significantly from account baseline.</p></div></article>
+<!-- Card 3: Analyst Verdict & Disposition Notes -->
+<article class="bg-surface border border-outline-variant rounded-lg p-4 shadow-sm space-y-3"><div class="flex items-center justify-between pb-2 border-b border-outline-variant"><div class="flex items-center space-x-2"><span class="material-symbols-outlined text-primary text-[18px]">rate_review</span><h2 class="text-xs font-semibold text-white">Analyst Verdict &amp; Notes</h2></div><span class="text-xs px-2 py-0.5 bg-surface-container-low rounded text-slate-400 border border-outline-variant">Manual Disposition</span></div><div class="space-y-2"><label class="text-xs font-medium text-slate-300 block">Case Decision</label><div class="grid grid-cols-3 gap-2"><label class="flex flex-col items-center justify-center p-2 rounded border border-red-500/50 bg-red-950/30 cursor-pointer text-center"><input checked="" class="text-red-500 focus:ring-0 bg-transparent border-red-500/60 h-3.5 w-3.5 mb-1" name="verdict" type="radio"><span class="text-xs font-semibold text-red-300 leading-tight">Confirm Fraud</span></label><label class="flex flex-col items-center justify-center p-2 rounded border border-outline-variant bg-surface-container-low hover:bg-surface-container cursor-pointer text-center"><input class="text-emerald-500 focus:ring-0 bg-transparent border-outline-variant h-3.5 w-3.5 mb-1" name="verdict" type="radio"><span class="text-xs font-medium text-on-surface leading-tight">Mark Legitimate</span></label><label class="flex flex-col items-center justify-center p-2 rounded border border-outline-variant bg-surface-container-low hover:bg-surface-container cursor-pointer text-center"><input class="text-amber-500 focus:ring-0 bg-transparent border-outline-variant h-3.5 w-3.5 mb-1" name="verdict" type="radio"><span class="text-xs font-medium text-on-surface leading-tight">Investigate Further</span></label></div></div><div class="space-y-1.5"><label class="text-xs font-medium text-slate-300 block">Review Notes</label><textarea class="w-full text-xs font-sans p-2.5 bg-surface-container-low border border-outline-variant text-white rounded focus:border-primary focus:ring-0 focus:outline-none placeholder:text-slate-500 resize-none" placeholder="Record analysis reasoning, feature anomalies, or verification details..." rows="3"></textarea></div><div class="flex items-center justify-between pt-1"><span class="text-xs text-slate-400">Analyst: S. Kowalski</span><button class="px-4 py-1.5 bg-primary hover:bg-cyan-300 text-on-primary font-semibold text-xs rounded transition-colors flex items-center space-x-1.5"><span class="material-symbols-outlined text-[15px]">check_circle</span><span class="">Submit Decision</span></button></div></article>
+</div>
+<!-- RIGHT COLUMN (55% => 6 of 10 cols) -->
+<div class="lg:col-span-6 flex flex-col space-y-5">
+<!-- Card 1: Real-time Model Inference & Risk Score -->
+<article class="bg-surface border border-outline-variant rounded-lg p-4 shadow-sm space-y-3"><div class="flex items-center justify-between pb-2 border-b border-outline-variant"><div class="flex items-center space-x-2"><span class="material-symbols-outlined text-primary text-[18px]">psychology</span><h2 class="text-xs font-semibold text-white">Model Inference &amp; Risk Score</h2></div><div class="flex items-center space-x-2"><span class="text-[11px] font-mono px-2 py-0.5 bg-surface-container-low text-primary border border-primary/30 rounded">Latency: 3.2 ms</span><span class="w-2 h-2 rounded-full bg-emerald-400" title="Model Ready"></span></div></div><div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center"><div class="md:col-span-5 p-3.5 bg-red-950/30 border border-red-900/60 rounded-lg flex flex-col justify-between"><div class="flex items-center justify-between"><span class="text-xs font-semibold text-red-300">Fraud Probability</span><span class="px-2 py-0.5 bg-red-600 text-white font-semibold text-xs rounded">High Risk</span></div><div class="my-2 flex items-baseline space-x-1.5"><span class="text-4xl font-bold font-mono text-red-400 tracking-tight">0.842</span><span class="text-xs text-red-300 font-mono">/ 1.000</span></div><div><div class="w-full bg-red-950/80 h-2 rounded-full relative overflow-hidden border border-red-900/50"><div class="bg-red-500 h-2 rounded-full" style="width: 84.2%;"></div></div><div class="flex justify-between text-xs text-red-300 mt-1.5"><span class="text-slate-400">Safe (0.0)</span><span class="text-amber-300 font-medium font-mono">Threshold: 0.75</span><span class="text-red-400 font-medium">Flagged (1.0)</span></div></div></div><div class="md:col-span-7 grid grid-cols-2 gap-2 text-xs"><div class="p-2 bg-surface-container-low border border-outline-variant rounded"><span class="text-xs text-slate-400 block">Active Model</span><span class="font-medium text-white block truncate">RandomForestClassifier</span><span class="text-[11px] font-mono text-primary">v1.0 (Trained)</span></div><div class="p-2 bg-surface-container-low border border-outline-variant rounded"><span class="text-xs text-slate-400 block">Resampling Method</span><span class="font-medium text-white block">SMOTE Balancing</span><span class="text-[11px] text-emerald-400">Ratio 1:1 on Train</span></div><div class="p-2 bg-surface-container-low border border-outline-variant rounded"><span class="text-xs text-slate-400 block">Decision Threshold</span><span class="font-semibold font-mono text-red-400 block">≥ 0.75 Flagged</span><span class="text-[11px] text-slate-400">Optimized for Recall</span></div><div class="p-2 bg-surface-container-low border border-outline-variant rounded"><span class="text-xs text-slate-400 block">Validation Metrics</span><span class="font-medium text-white block font-mono">ROC-AUC: 0.942</span><span class="text-[11px] text-emerald-400 font-mono">F1: 0.891 | Recall: 92.6%</span></div></div></div></article>
+<!-- Card 2: Local SHAP Feature Waterfall (TreeSHAP Explanation) -->
+<article class="bg-surface border border-outline-variant rounded-lg p-4 shadow-sm space-y-3"><div class="flex items-center justify-between pb-2 border-b border-outline-variant"><div class="flex items-center space-x-2"><span class="material-symbols-outlined text-primary text-[18px]">waterfall_chart</span><h2 class="text-xs font-semibold text-white">Local Feature Contributions (TreeSHAP)</h2></div><div class="flex items-center space-x-3 text-xs"><span class="flex items-center space-x-1.5 text-slate-300"><span class="w-2.5 h-2 bg-red-500 rounded-sm"></span><span class="">Increases Risk (+SHAP)</span></span><span class="flex items-center space-x-1.5 text-slate-300"><span class="w-2.5 h-2 bg-emerald-500 rounded-sm"></span><span class="">Decreases Risk (-SHAP)</span></span></div></div><div class="text-xs text-on-surface-variant">Base rate score <span class="text-white font-mono font-semibold">E[f(x)] = 0.12</span> shifted to <span class="text-red-400 font-mono font-bold">f(x) = 0.842</span> by top features:</div><div class="space-y-2 pt-1 text-xs"><div class="p-2 rounded bg-surface-container-low border border-outline-variant"><div class="flex justify-between items-center mb-1"><span class="font-mono text-slate-200 text-xs">amt_ratio_to_avg (3.4x)</span><span class="text-red-400 font-mono font-bold text-xs">+0.28</span></div><div class="w-full bg-surface-container-highest h-2.5 rounded relative flex items-center"><div class="absolute left-[35%] top-0 bottom-0 w-0.5 bg-slate-600 z-10"></div><div class="absolute left-[35%] h-2 bg-red-500 rounded-r" style="width: 48%;"></div></div></div><div class="p-2 rounded bg-surface-container-low border border-outline-variant"><div class="flex justify-between items-center mb-1"><span class="font-mono text-slate-200 text-xs">velocity_1h (4 transactions)</span><span class="text-red-400 font-mono font-bold text-xs">+0.21</span></div><div class="w-full bg-surface-container-highest h-2.5 rounded relative flex items-center"><div class="absolute left-[35%] top-0 bottom-0 w-0.5 bg-slate-600 z-10"></div><div class="absolute left-[35%] h-2 bg-red-500 rounded-r" style="width: 36%;"></div></div></div><div class="p-2 rounded bg-surface-container-low border border-outline-variant"><div class="flex justify-between items-center mb-1"><span class="font-mono text-slate-200 text-xs">foreign_transaction (Zip mismatch)</span><span class="text-red-400 font-mono font-bold text-xs">+0.15</span></div><div class="w-full bg-surface-container-highest h-2.5 rounded relative flex items-center"><div class="absolute left-[35%] top-0 bottom-0 w-0.5 bg-slate-600 z-10"></div><div class="absolute left-[35%] h-2 bg-red-500 rounded-r" style="width: 26%;"></div></div></div><div class="p-2 rounded bg-surface-container-low border border-outline-variant"><div class="flex justify-between items-center mb-1"><span class="font-mono text-slate-200 text-xs">account_age_days (420 days)</span><span class="text-emerald-400 font-mono font-bold text-xs">-0.09 (protective)</span></div><div class="w-full bg-surface-container-highest h-2.5 rounded relative flex items-center"><div class="absolute left-[35%] top-0 bottom-0 w-0.5 bg-slate-600 z-10"></div><div class="absolute right-[65%] h-2 bg-emerald-500 rounded-l" style="width: 16%;"></div></div></div></div><div class="pt-2 border-t border-outline-variant flex justify-between items-center text-xs text-slate-400 font-sans"><span class="">TreeSHAP Explainer (shap Python library)</span><span class="font-mono text-red-300">Net Impact: +0.722</span></div></article>
+<!-- Card 3: Model Decision Confidence & Challenger Comparison -->
+<article class="bg-surface border border-outline-variant rounded-lg p-4 shadow-sm space-y-3"><div class="flex items-center justify-between pb-2 border-b border-outline-variant"><div class="flex items-center space-x-2"><span class="material-symbols-outlined text-primary text-[18px]">compare_arrows</span><h2 class="text-xs font-semibold text-white">Model Comparison: Primary vs Baseline</h2></div><span class="text-xs text-emerald-400 font-medium">Consensus: High Risk</span></div><div class="grid grid-cols-2 gap-3"><div class="p-3 bg-surface-container-low rounded-lg border border-primary/40 space-y-2"><div class="flex items-center justify-between"><span class="text-xs font-semibold text-primary">RandomForestClassifier</span><span class="px-1.5 py-0.5 bg-primary text-on-primary text-[10px] font-bold rounded">PRIMARY</span></div><span class="text-xs text-slate-400 block">SMOTE Balanced + Threshold 0.75</span><div class="flex items-baseline space-x-2"><span class="text-2xl font-bold font-mono text-red-400">0.842</span><span class="text-xs text-red-300 font-medium">Score (Flagged)</span></div><div class="pt-1 text-[11px] text-slate-400 border-t border-outline-variant font-mono">ROC-AUC: 0.942 | Recall: 92.6%</div></div><div class="p-3 bg-surface-container-low rounded-lg border border-outline-variant space-y-2"><div class="flex items-center justify-between"><span class="text-xs font-semibold text-slate-300">Logistic Regression</span><span class="px-1.5 py-0.5 bg-surface-container-highest text-slate-300 text-[10px] font-medium rounded">BASELINE</span></div><span class="text-xs text-slate-400 block">Standard Scaler + L2 Penalty</span><div class="flex items-baseline space-x-2"><span class="text-2xl font-bold font-mono text-red-400">0.740</span><span class="text-xs text-red-300 font-medium">Score (Borderline)</span></div><div class="pt-1 text-[11px] text-slate-400 border-t border-outline-variant font-mono">ROC-AUC: 0.812 | Recall: 78.1%</div></div></div><div class="p-2.5 bg-surface-container-low rounded border border-outline-variant flex items-center justify-between text-xs"><span class="text-slate-300"><strong class="text-white font-medium">Comparison Insight:</strong> Random Forest captures non-linear interaction between velocity and location mismatch.</span><span class="text-xs font-mono text-primary">Threshold: 0.75</span></div></article>
+</div>
+</main>
+</div>
+</div>
+</div>
+
+
+</body></html>

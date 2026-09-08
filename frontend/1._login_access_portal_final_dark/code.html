@@ -1,0 +1,319 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SentinelML - Post-Deployment Fraud Detection &amp; Drift Monitoring Portal</title>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "background": "#0B111E",
+            "surface": "#0F172A",
+            "surface-container": "#161F33",
+            "surface-container-high": "#1E293B",
+            "primary": "#06B6D4",
+            "primary-hover": "#0891B2",
+            "primary-light": "#4CD7F6",
+            "border-slate": "#1E293B",
+            "border-slate-light": "#2A3A54",
+            "on-surface": "#F8FAFC",
+            "on-surface-variant": "#94A3B8",
+            "on-surface-subtle": "#64748B"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+    }
+    .grid-bg-mesh {
+      background-color: #070C16;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 80% 80%, rgba(79, 219, 200, 0.08) 0%, transparent 45%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+    }
+  </style>
+</head>
+<body class="bg-[#080D17] text-[#F8FAFC] font-sans antialiased min-h-screen flex items-center justify-center p-0 md:p-6 lg:p-8">
+<!-- Desktop 1440x900 Centered Application Viewport Container -->
+<div class="w-full max-w-[1440px] h-full lg:h-[900px] min-h-[900px] bg-[#0B111E] rounded-none md:rounded-2xl border border-[#1E293B] shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+<!-- LEFT PANEL: Hero Brand & Project Overview (520px fixed on desktop) -->
+<aside class="w-full lg:w-[520px] lg:min-w-[520px] grid-bg-mesh border-b lg:border-b-0 lg:border-r border-[#1E293B] p-8 lg:p-12 flex flex-col justify-between relative">
+<!-- Top Brand Header -->
+<div>
+<div class="flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-[#0F172A] border border-[#2A3A54] flex items-center justify-center text-[#4CD7F6] shadow-sm">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+<div><span class="text-base font-bold text-[#F8FAFC] block leading-tight">Fraud Detection &amp; Drift System</span>
+<span class="text-xs text-[#06B6D4] font-medium">Academic Capstone Project | FastAPI &amp; MySQL</span></div>
+</div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#0F172A] border border-[#1E293B] text-xs text-[#94A3B8]">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="">Model Active</span>
+</div>
+</div>
+<!-- Hero Title & College Project Subtitle -->
+<div class="mt-12 lg:mt-14"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#06B6D4]/10 border border-[#06B6D4]/30 text-[#4CD7F6] text-xs font-medium mb-4">
+<span class="material-symbols-outlined text-sm">school</span>
+<span class="">Undergraduate Senior Project</span>
+</div>
+<h1 class="text-3xl lg:text-[34px] font-bold text-[#F8FAFC] leading-snug tracking-tight">
+Fraud Detection &amp; Drift Monitoring
+</h1>
+<p class="mt-3 text-sm text-[#94A3B8] leading-relaxed">
+An applied machine learning system designed to flag suspicious financial transactions and monitor real-time distribution drift across feature vectors.
+</p></div>
+<!-- Clean Key Metric Feature Pills -->
+<div class="mt-8 space-y-3"><div class="flex items-center gap-3.5 p-3 rounded-lg bg-[#0F172A]/80 border border-[#1E293B] backdrop-blur-sm">
+<div class="w-9 h-9 rounded-md bg-[#06B6D4]/10 text-[#06B6D4] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg">verified</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-[#F8FAFC]">92.4% Model Precision</span>
+<span class="text-xs text-emerald-400 font-medium">Test Set</span>
+</div>
+<p class="text-xs text-[#94A3B8] truncate">Trained on synthetic credit card fraud benchmark dataset</p>
+</div>
+</div>
+<div class="flex items-center gap-3.5 p-3 rounded-lg bg-[#0F172A]/80 border border-[#1E293B] backdrop-blur-sm">
+<div class="w-9 h-9 rounded-md bg-[#06B6D4]/10 text-[#06B6D4] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg">insights</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-[#F8FAFC]">SHAP TreeExplainer</span>
+<span class="text-xs text-[#06B6D4]">Local SHAP</span>
+</div>
+<p class="text-xs text-[#94A3B8] truncate">Feature attribution bar plots for flagged transactions</p>
+</div>
+</div>
+<div class="flex items-center gap-3.5 p-3 rounded-lg bg-[#0F172A]/80 border border-[#1E293B] backdrop-blur-sm">
+<div class="w-9 h-9 rounded-md bg-[#06B6D4]/10 text-[#06B6D4] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-lg">monitoring</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-[#F8FAFC]">Population Stability Index</span>
+<span class="text-xs text-[#94A3B8]">PSI: 0.042</span>
+</div>
+<p class="text-xs text-[#94A3B8] truncate">Drift tracking across batch inference distributions</p>
+</div>
+</div></div>
+</div>
+<!-- Left Panel Footer -->
+<div class="mt-8 pt-6 border-t border-[#1E293B] flex items-center justify-between text-xs text-[#64748B]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-[#06B6D4]">code</span>
+<span class="">Python • scikit-learn • FastAPI</span>
+</div>
+<span class="">v1.0.0</span>
+</div>
+</aside>
+<!-- RIGHT PANEL: Sleek, Centered Login Portal Interface -->
+<main class="flex-1 bg-[#0B111E] p-6 sm:p-10 lg:p-14 flex flex-col justify-between overflow-y-auto">
+<!-- Top Session Status Bar -->
+<div class="flex items-center justify-between pb-4 border-b border-[#1E293B]"><div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+<span class="text-xs font-medium text-[#94A3B8]">API Service Online</span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-[#64748B]">
+<span class="material-symbols-outlined text-sm">database</span>
+<span class="">MySQL Local Instance</span>
+</div></div>
+<!-- Main Login Card (Centered & Clean) -->
+<div class="w-full max-w-[440px] mx-auto py-8">
+<!-- Heading -->
+<div class="mb-6 text-left">
+<h2 class="text-2xl font-bold text-[#F8FAFC] tracking-tight">Portal Access</h2>
+<p class="text-sm text-[#94A3B8] mt-1.5">Authenticate with your project credentials to enter the workspace.</p>
+</div>
+<!-- Role Toggle Tabs: Simplified Analyst / Admin -->
+<div class="mb-6">
+<label class="block text-xs font-medium text-[#94A3B8] mb-2">Select User Role</label>
+<div class="grid grid-cols-2 p-1 rounded-lg bg-[#070C16] border border-[#1E293B]">
+<button class="py-2.5 px-4 text-sm font-semibold rounded-md transition-all flex items-center justify-center gap-2 bg-[#0F172A] text-[#F8FAFC] border border-[#2A3A54] shadow-sm" id="roleAnalyst" onclick="setRole('analyst')" type="button">
+<span class="material-symbols-outlined text-base text-[#06B6D4]">fact_check</span>
+<span class="">Analyst</span>
+</button>
+<button class="py-2.5 px-4 text-sm font-medium rounded-md transition-all flex items-center justify-center gap-2 text-[#94A3B8] hover:text-[#F8FAFC] border border-transparent" id="roleAdmin" onclick="setRole('admin')" type="button">
+<span class="material-symbols-outlined text-base text-[#64748B]">admin_panel_settings</span>
+<span class="">Admin</span>
+</button>
+</div>
+</div>
+<!-- Login Form -->
+<form class="space-y-4" onsubmit="event.preventDefault(); simulateAuth();">
+<!-- Email Input -->
+<div>
+<label class="block text-xs font-medium text-[#F8FAFC] mb-1.5" for="emailField">Email Address</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#64748B]">
+<span class="material-symbols-outlined text-lg">alternate_email</span>
+</div>
+<input class="w-full h-11 pl-10 pr-4 rounded-lg bg-[#070C16] border border-[#1E293B] text-sm text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none focus:border-[#06B6D4] focus:ring-1 focus:ring-[#06B6D4] transition-all" id="emailField" placeholder="user@fraud-detector.local" required="" type="email" value="analyst@fraud-detector.local">
+</div>
+</div>
+<!-- Password Input -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="block text-xs font-medium text-[#F8FAFC]" for="passwordField">Password</label>
+<button class="text-xs text-[#06B6D4] hover:underline font-medium" onclick="quickFillPassword()" type="button">Fill Default</button>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#64748B]">
+<span class="material-symbols-outlined text-lg">lock</span>
+</div>
+<input class="w-full h-11 pl-10 pr-11 rounded-lg bg-[#070C16] border border-[#1E293B] text-sm text-[#F8FAFC] placeholder:text-[#64748B] focus:outline-none focus:border-[#06B6D4] focus:ring-1 focus:ring-[#06B6D4] transition-all" id="passwordField" placeholder="Enter password" required="" type="password" value="demo1234">
+<button class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#64748B] hover:text-[#F8FAFC] focus:outline-none" id="togglePasswordBtn" onclick="togglePassword()" type="button">
+<span class="material-symbols-outlined text-lg" id="passwordEyeIcon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Environment / Model Selector -->
+<div>
+<label class="block text-xs font-medium text-[#F8FAFC] mb-1.5" for="envSelector">Environment / Model</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#64748B]">
+<span class="material-symbols-outlined text-lg">hub</span>
+</div>
+<select class="w-full h-11 pl-10 pr-10 rounded-lg bg-[#070C16] border border-[#1E293B] text-sm text-[#F8FAFC] focus:outline-none focus:border-[#06B6D4] focus:ring-1 focus:ring-[#06B6D4] transition-all appearance-none cursor-pointer" id="envSelector">
+<option selected="" value="rf-balanced">Random Forest Classifier (v1.0 - Balanced via SMOTE)</option>
+<option value="xgb-baseline">XGBoost Baseline (v0.9 - Imbalanced)</option>
+<option value="logistic-regression">Logistic Regression (Benchmark Standard)</option>
+</select>
+<div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-[#64748B]">
+<span class="material-symbols-outlined text-sm">unfold_more</span>
+</div>
+</div>
+</div>
+<!-- Primary Submit Button -->
+<div class="pt-2">
+<button class="w-full h-11 px-4 rounded-lg bg-[#06B6D4] hover:bg-[#0891B2] text-[#080D17] font-semibold text-sm flex items-center justify-center gap-2 transition-colors shadow-md shadow-[#06B6D4]/10 cursor-pointer" id="submitBtn" type="submit">
+<span id="btnText" class="">Sign In to Dashboard</span>
+<span class="material-symbols-outlined text-base font-bold">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Demo Credentials Helper Card -->
+<div class="mt-6 p-3.5 rounded-lg bg-[#0F172A] border border-[#1E293B] text-xs"><div class="flex items-center justify-between text-[#94A3B8] mb-2">
+<div class="flex items-center gap-1.5 font-medium text-[#F8FAFC]">
+<span class="material-symbols-outlined text-sm text-[#06B6D4]">account_circle</span>
+<span class="">Demo Test Accounts</span>
+</div>
+<span class="text-[11px] text-[#64748B]">Click to autofill</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-xs">
+<button class="p-2.5 rounded-lg bg-[#070C16] hover:bg-[#161F33] border border-[#1E293B] text-left transition-colors text-[#94A3B8] hover:text-[#4CD7F6]" onclick="setDemoCredentials('analyst')" type="button">
+<span class="text-xs text-[#F8FAFC] font-medium block">Analyst</span>
+<span class="text-[11px] text-[#64748B] block truncate">analyst@fraud-detector.local</span>
+</button>
+<button class="p-2.5 rounded-lg bg-[#070C16] hover:bg-[#161F33] border border-[#1E293B] text-left transition-colors text-[#94A3B8] hover:text-[#4CD7F6]" onclick="setDemoCredentials('admin')" type="button">
+<span class="text-xs text-[#F8FAFC] font-medium block">Admin</span>
+<span class="text-[11px] text-[#64748B] block truncate">admin@fraud-detector.local</span>
+</button>
+</div></div>
+</div>
+<!-- Bottom System Notice & Forensic Audit Signature -->
+<div class="pt-4 border-t border-[#1E293B] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#64748B]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-[#06B6D4]">info</span>
+<span class="">Evaluation Environment: <span class="text-[#94A3B8]">Local Development Server</span></span>
+</div>
+<div class="flex items-center gap-2">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-[#06B6D4]"></span>
+<span class="">Model Drift Logging Active</span>
+</div>
+</div>
+</main>
+</div>
+<!-- Interactive Demo Logic -->
+<script>
+    function setRole(role) {
+      const analystBtn = document.getElementById('roleAnalyst');
+      const adminBtn = document.getElementById('roleAdmin');
+      const emailInput = document.getElementById('emailField');
+      
+      if (role === 'analyst') {
+        analystBtn.className = 'py-2.5 px-4 text-sm font-semibold rounded-md transition-all flex items-center justify-center gap-2 bg-[#0F172A] text-[#F8FAFC] border border-[#2A3A54] shadow-sm';
+        adminBtn.className = 'py-2.5 px-4 text-sm font-medium rounded-md transition-all flex items-center justify-center gap-2 text-[#94A3B8] hover:text-[#F8FAFC] border border-transparent';
+        emailInput.value = 'analyst@sentinel.edu';
+      } else {
+        adminBtn.className = 'py-2.5 px-4 text-sm font-semibold rounded-md transition-all flex items-center justify-center gap-2 bg-[#0F172A] text-[#F8FAFC] border border-[#2A3A54] shadow-sm';
+        analystBtn.className = 'py-2.5 px-4 text-sm font-medium rounded-md transition-all flex items-center justify-center gap-2 text-[#94A3B8] hover:text-[#F8FAFC] border border-transparent';
+        emailInput.value = 'admin@sentinel.edu';
+      }
+    }
+
+    function setDemoCredentials(role) {
+      setRole(role);
+      document.getElementById('passwordField').value = 'sentinel2025!';
+    }
+
+    function quickFillPassword() {
+      document.getElementById('passwordField').value = 'sentinel2025!';
+    }
+
+    function togglePassword() {
+      const pass = document.getElementById('passwordField');
+      const icon = document.getElementById('passwordEyeIcon');
+      if (pass.type === 'password') {
+        pass.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        pass.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    function simulateAuth() {
+      const btn = document.getElementById('submitBtn');
+      const originalHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = `
+        <span class="material-symbols-outlined text-base animate-spin">progress_activity</span>
+        <span>Validating Pipeline Model Token...</span>
+      `;
+      setTimeout(() => {
+        btn.innerHTML = `
+          <span class="material-symbols-outlined text-base text-emerald-950 font-bold">check_circle</span>
+          <span class="text-emerald-950 font-bold">Access Authorized &bull; Launching Console</span>
+        `;
+        btn.classList.remove('bg-[#06B6D4]', 'hover:bg-[#0891B2]');
+        btn.classList.add('bg-emerald-400');
+        setTimeout(() => {
+          btn.innerHTML = originalHtml;
+          btn.disabled = false;
+          btn.classList.remove('bg-emerald-400');
+          btn.classList.add('bg-[#06B6D4]', 'hover:bg-[#0891B2]');
+        }, 2200);
+      }, 1000);
+    }
+  </script>
+
+
+</body></html>
