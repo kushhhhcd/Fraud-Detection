@@ -20,7 +20,7 @@ from imblearn.over_sampling import SMOTE
 # 1. LOAD DATASET
 # ==========================================
 
-DATA_PATH = "ml/data/PS_20174392719_1491204439457_log.csv"
+DATA_PATH = "data/PS_20174392719_1491204439457_log.csv"
 
 df = pd.read_csv(DATA_PATH)
 
@@ -230,17 +230,17 @@ print(
 
 joblib.dump(
     model,
-    "ml/model.pkl"
+    "models/model.pkl"
 )
 
 joblib.dump(
     X_train.columns.tolist(),
-    "ml/features.pkl"
+    "models/features.pkl"
 )
 
 joblib.dump(
     threshold,
-    "ml/threshold.pkl"
+    "models/threshold.pkl"
 )
 
 print("\nModel saved successfully.")
