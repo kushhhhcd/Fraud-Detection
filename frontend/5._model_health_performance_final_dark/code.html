@@ -1,0 +1,180 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SentinelML - Model Health &amp; Performance Evaluation</title>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.preconnect.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          canvas: "#0B111E",
+          card: "#131D31",
+          border: "#1E293B",
+          tealAccent: "#06B6D4",
+          redAccent: "#EF4444",
+          amberAccent: "#F59E0B",
+          greenAccent: "#10B981"
+        },
+        fontFamily: {
+          sans: ["Inter", "sans-serif"],
+          mono: ["JetBrains Mono", "monospace"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 18px;
+    line-height: 1;
+    display: inline-block;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+  }
+  /* Custom scrollbar for fixed viewport container */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0B111E;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1E293B;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
+</style>
+</head>
+<body class="bg-black text-slate-100 antialiased font-sans flex items-center justify-center min-h-screen p-0 m-0">
+<!-- ========================================================= -->
+<!-- Unified 1440x900 Viewport Container                        -->
+<!-- ========================================================= -->
+<div class="w-[1440px] max-w-[1440px] h-[900px] overflow-hidden flex bg-[#0B111E] shadow-2xl relative">
+<!-- ========================================================= -->
+<!-- Unified Shell: Standard w-64 Sidebar                      -->
+<!-- ========================================================= -->
+<aside class="w-64 h-full flex flex-col justify-between p-4 bg-[#0F172A] border-r border-[#1E293B] flex-shrink-0 select-none">
+<!-- Top Branding & Navigation -->
+<div class="flex flex-col gap-4">
+<!-- Brand Logo Anchor -->
+<div class="flex items-center gap-3 px-1 py-1 border-b border-[#1E293B] pb-4">
+<div class="w-8 h-8 rounded bg-[#06B6D4] text-[#003640] flex items-center justify-center flex-shrink-0 shadow">
+<span class="material-symbols-outlined text-[20px] text-white" data-icon="shield">shield</span>
+</div>
+<div class="flex flex-col leading-tight"><span class="text-[14px] font-bold text-white tracking-tight leading-snug">Fraud Detection</span><span class="text-[10px] font-medium text-slate-400">&amp; Drift Monitoring</span></div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-1 text-[13px] font-medium">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-slate-400 hover:bg-[#1E293B] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span class="">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-slate-400 hover:bg-[#1E293B] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+<span class="">Transactions</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded text-slate-400 hover:bg-[#1E293B] hover:text-white transition-colors" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span class="">Alerts</span>
+</div>
+<span class="bg-[#EF4444] text-white px-1.5 py-0.2 rounded text-[10px] font-mono font-bold">12</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-slate-400 hover:bg-[#1E293B] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">fact_check</span>
+<span class="">Cases</span>
+</a>
+<!-- Active Tab: Model Health -->
+<a class="flex items-center gap-3 px-3 py-2 rounded bg-[#131D31] text-[#06B6D4] border-l-[3px] border-[#06B6D4] font-semibold" href="#">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">health_and_safety</span>
+<span class="">Model Health</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-slate-400 hover:bg-[#1E293B] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">ssid_chart</span>
+<span class="">Drift Monitoring</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-slate-400 hover:bg-[#1E293B] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">manage_accounts</span>
+<span class="">User Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-slate-400 hover:bg-[#1E293B] hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="">Settings</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Sidebar Actions & User Profile -->
+<div class="flex flex-col gap-3 pt-3 border-t border-[#1E293B]">
+<!-- Circuit Breaker -->
+<div class="w-full flex items-center justify-between py-2 px-3 bg-[#131D31] border border-[#1E293B] rounded text-[11px]"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span><span class="text-slate-300 font-medium">Local Inference API</span></div><span class="font-mono text-[10px] text-[#10B981] font-semibold">ONLINE: 5000</span></div>
+<!-- User Profile Card -->
+<div class="flex items-center gap-3 p-2 rounded bg-[#131D31] border border-[#1E293B]">
+<div class="w-8 h-8 rounded-full bg-[#1E293B] text-slate-300 flex items-center justify-center font-bold text-xs border border-slate-600">
+          AL
+        </div>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="text-[12px] font-semibold text-white truncate">Alex Laurent</span>
+<span class="text-[10px] font-mono text-slate-400 truncate">Lead ML Ops Eng</span>
+</div>
+<button class="text-slate-400 hover:text-white transition-colors" title="Account Settings">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- ========================================================= -->
+<!-- Right Content Region (Topbar + Scrollable Main Body)      -->
+<!-- ========================================================= -->
+<div class="flex-1 flex flex-col min-w-0 h-[900px] overflow-hidden bg-[#0B111E]">
+<!-- Topbar: Strict 56px height -->
+<header class="h-[56px] px-6 w-full bg-[#0F172A] border-b border-[#1E293B] flex items-center justify-between flex-shrink-0 z-20">
+<!-- Breadcrumb + Active Model Selector Dropdown -->
+<div class="flex items-center gap-4 min-w-0"><div class="flex items-center gap-2 text-[13px] font-medium text-slate-400"><span class="hover:text-slate-200 cursor-pointer">Project</span><span class="text-slate-600">/</span><span class="text-white font-semibold">Model Health &amp; Validation</span></div><div class="h-4 w-[1px] bg-[#1E293B]"></div><div class="flex items-center gap-2 bg-[#131D31] px-3 py-1.5 rounded border border-[#1E293B] cursor-pointer hover:border-[#06B6D4] transition-colors"><span class="material-symbols-outlined text-[#06B6D4] text-[16px]">psychology</span><span class="text-[12px] font-semibold text-white">Model: Random Forest (SMOTE Balanced)</span><span class="material-symbols-outlined text-slate-400 text-[16px]">arrow_drop_down</span></div><div class="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-[#10B981]/30 bg-[#10B981]/10 text-[#10B981] text-[11px] font-medium"><span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span><span class="">Validation Set: 20% Split</span></div></div>
+<!-- Right Utility Actions & Trigger Retrain CTA -->
+<div class="flex items-center gap-3 flex-shrink-0"><button class="h-8 px-3 bg-[#131D31] text-slate-200 border border-[#1E293B] hover:bg-[#1E293B] rounded text-[12px] font-medium flex items-center gap-1.5 transition-colors" type="button"><span class="material-symbols-outlined text-[16px]">download</span><span class="">Export Evaluation</span></button><button class="h-8 px-3.5 bg-[#06B6D4] hover:bg-cyan-400 text-[#003640] font-bold rounded text-[12px] flex items-center gap-1.5 transition-colors shadow-sm" type="button"><span class="material-symbols-outlined text-[16px]">play_arrow</span><span class="">Retrain Pipeline</span></button><div class="h-4 w-[1px] bg-[#1E293B]"></div><div class="px-2 py-1 bg-[#131D31] rounded text-[11px] font-mono text-slate-400 border border-[#1E293B]">v1.2.0</div></div>
+</header>
+<!-- ========================================================= -->
+<!-- Scrollable Body: Strict h-[calc(900px-56px)]              -->
+<!-- ========================================================= -->
+<main class="h-[calc(900px-56px)] overflow-y-auto p-6 space-y-6">
+<!-- ===================================================== -->
+<!-- Metric Cards Row (6 Metrics Bento Bar)                -->
+<!-- ===================================================== -->
+<section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3"><div class="bg-[#131D31] border border-[#1E293B] rounded-lg p-3.5 flex flex-col justify-between hover:border-[#06B6D4]/40 transition-colors"><div class="flex items-center justify-between mb-1.5"><span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Precision</span><span class="material-symbols-outlined text-[#10B981] text-[16px]">check_circle</span></div><div class="flex items-baseline justify-between py-0.5"><span class="text-[24px] font-bold text-white tracking-tight leading-none">92.4%</span><span class="text-[11px] text-[#10B981] font-semibold">+1.2%</span></div><div class="mt-2.5 pt-2 border-t border-[#1E293B] flex items-center justify-between text-[11px] text-slate-400"><span class="">Target: &gt;90%</span><span class="px-1.5 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 font-semibold text-[10px]">Target Met</span></div></div><div class="bg-[#131D31] border border-[#1E293B] rounded-lg p-3.5 flex flex-col justify-between hover:border-[#06B6D4]/40 transition-colors"><div class="flex items-center justify-between mb-1.5"><span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Recall</span><span class="material-symbols-outlined text-[#10B981] text-[16px]">check_circle</span></div><div class="flex items-baseline justify-between py-0.5"><span class="text-[24px] font-bold text-white tracking-tight leading-none">88.1%</span><span class="text-[11px] text-[#10B981] font-semibold">+2.4%</span></div><div class="mt-2.5 pt-2 border-t border-[#1E293B] flex items-center justify-between text-[11px] text-slate-400"><span class="">Target: &gt;85%</span><span class="px-1.5 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 font-semibold text-[10px]">Target Met</span></div></div><div class="bg-[#131D31] border border-[#1E293B] rounded-lg p-3.5 flex flex-col justify-between hover:border-[#06B6D4]/40 transition-colors"><div class="flex items-center justify-between mb-1.5"><span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">F2-Score</span><span class="material-symbols-outlined text-[#06B6D4] text-[16px]">shield</span></div><div class="flex items-baseline justify-between py-0.5"><span class="text-[24px] font-bold text-white tracking-tight leading-none">0.898</span><span class="text-[11px] text-[#10B981] font-semibold">+0.015</span></div><div class="mt-2.5 pt-2 border-t border-[#1E293B] flex items-center justify-between text-[11px] text-slate-400"><span class="truncate">Fraud Focus (β=2)</span><span class="px-1.5 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 font-semibold text-[10px]">Target Met</span></div></div><div class="bg-[#131D31] border border-[#1E293B] rounded-lg p-3.5 flex flex-col justify-between hover:border-[#06B6D4]/40 transition-colors"><div class="flex items-center justify-between mb-1.5"><span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">F1-Score</span><span class="material-symbols-outlined text-slate-400 text-[16px]">analytics</span></div><div class="flex items-baseline justify-between py-0.5"><span class="text-[24px] font-bold text-white tracking-tight leading-none">0.902</span><span class="text-[11px] text-[#10B981] font-semibold">+0.018</span></div><div class="mt-2.5 pt-2 border-t border-[#1E293B] flex items-center justify-between text-[11px] text-slate-400"><span class="">Harmonic Mean</span><span class="px-1.5 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 font-semibold text-[10px]">Target Met</span></div></div><div class="bg-[#131D31] border border-[#1E293B] rounded-lg p-3.5 flex flex-col justify-between hover:border-[#06B6D4]/40 transition-colors"><div class="flex items-center justify-between mb-1.5"><span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">ROC-AUC</span><span class="material-symbols-outlined text-[#06B6D4] text-[16px]">show_chart</span></div><div class="flex items-baseline justify-between py-0.5"><span class="text-[24px] font-bold text-white tracking-tight leading-none">0.942</span><span class="text-[11px] text-[#10B981] font-semibold">+0.021</span></div><div class="mt-2.5 pt-2 border-t border-[#1E293B] flex items-center justify-between text-[11px] text-slate-400"><span class="">Baseline: 0.910</span><span class="px-1.5 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 font-semibold text-[10px]">Target Met</span></div></div><div class="bg-[#131D31] border border-[#1E293B] rounded-lg p-3.5 flex flex-col justify-between hover:border-[#06B6D4]/40 transition-colors"><div class="flex items-center justify-between mb-1.5"><span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">PR-AUC</span><span class="material-symbols-outlined text-[#06B6D4] text-[16px]">area_chart</span></div><div class="flex items-baseline justify-between py-0.5"><span class="text-[24px] font-bold text-white tracking-tight leading-none">0.915</span><span class="text-[11px] text-[#10B981] font-semibold">+0.012</span></div><div class="mt-2.5 pt-2 border-t border-[#1E293B] flex items-center justify-between text-[11px] text-slate-400"><span class="">Curve Integral</span><span class="px-1.5 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 font-semibold text-[10px]">Target Met</span></div></div></section>
+<!-- ===================================================== -->
+<!-- Middle Grid: 60% Left / 40% Right                     -->
+<!-- ===================================================== -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left 60% (col-span-7): Precision-Recall & ROC Curve Analysis -->
+<div class="lg:col-span-7 bg-[#131D31] border border-[#1E293B] rounded-lg p-5 flex flex-col justify-between"><div class="flex items-center justify-between pb-3 border-b border-[#1E293B]"><div class="flex items-center gap-3"><h2 class="text-[15px] font-bold text-white">Precision-Recall &amp; ROC Curve Analysis</h2><span class="text-[11px] font-mono px-2 py-0.5 rounded bg-[#0F172A] text-[#06B6D4] border border-[#1E293B]">Holdout Split: 2,964 Evals</span></div><div class="flex items-center bg-[#0F172A] p-0.5 rounded border border-[#1E293B] text-[11px] font-medium"><button class="px-2.5 py-1 rounded bg-[#1E293B] text-white font-semibold shadow-sm" type="button">P-R Curve</button><button class="px-2.5 py-1 rounded text-slate-400 hover:text-white transition-colors" type="button">ROC Curve</button><button class="px-2.5 py-1 rounded text-slate-400 hover:text-white transition-colors" type="button">Lift / Gain</button></div></div><div class="relative w-full h-56 my-3 flex flex-col justify-end px-1 select-none"><div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-25"><div class="border-b border-dashed border-[#1E293B] w-full h-0 flex items-center justify-end"><span class="text-[10px] font-mono text-slate-400 pr-1">1.0</span></div><div class="border-b border-dashed border-[#1E293B] w-full h-0 flex items-center justify-end"><span class="text-[10px] font-mono text-slate-400 pr-1">0.8</span></div><div class="border-b border-dashed border-[#1E293B] w-full h-0 flex items-center justify-end"><span class="text-[10px] font-mono text-slate-400 pr-1">0.6</span></div><div class="border-b border-dashed border-[#1E293B] w-full h-0 flex items-center justify-end"><span class="text-[10px] font-mono text-slate-400 pr-1">0.4</span></div><div class="border-b border-dashed border-[#1E293B] w-full h-0 flex items-center justify-end"><span class="text-[10px] font-mono text-slate-400 pr-1">0.2</span></div><div class="border-b border-[#1E293B] w-full h-0"></div></div><svg class="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 500 200"><line stroke="#334155" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="500" y1="180" y2="180"></line><path d="M 0 24 Q 140 28, 260 46 T 350 85 T 440 152 T 500 195" fill="none" stroke="#64748B" stroke-dasharray="4 3" stroke-width="2"></path><path d="M 0 14 Q 160 16, 280 32 T 350 56 T 450 130 T 500 195" fill="none" stroke="#06B6D4" stroke-width="2.5"></path><line stroke="#94A3B8" stroke-dasharray="3 2" stroke-width="1.5" x1="350" x2="350" y1="0" y2="200"></line><circle cx="350" cy="56" fill="#06B6D4" r="5" stroke="#0B111E" stroke-width="2"></circle></svg><div class="absolute left-[70%] top-[14%] -translate-x-1/2 bg-[#080E1B] text-white px-3 py-1.5 rounded-md border border-[#06B6D4]/50 shadow-xl font-mono text-[11px] pointer-events-none flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#06B6D4]"></span><span class="">Cutoff: <strong class="text-[#06B6D4]">τ = 0.70</strong></span><span class="text-slate-600">|</span><span class="">P: <strong class="text-white">92.4%</strong></span><span class="text-slate-600">|</span><span class="">R: <strong class="text-white">88.1%</strong></span></div></div><div class="flex flex-col gap-2.5 pt-3 border-t border-[#1E293B]"><div class="flex items-center justify-between text-[11px] text-slate-400"><div class="flex items-center gap-4"><span class="flex items-center gap-1.5 text-white font-medium"><span class="w-3 h-1 bg-[#06B6D4] rounded"></span> Tuned RF + SMOTE</span><span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-[#64748B] border-t border-dashed border-slate-400"></span> Baseline RF (No SMOTE)</span><span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#06B6D4]"></span> Cutoff τ = 0.70</span></div><span class="font-mono font-semibold text-white px-2 py-0.5 rounded bg-[#0F172A] border border-[#1E293B]">PR-AUC: 0.915</span></div><div class="flex items-center gap-3 bg-[#0F172A] px-3.5 py-2 rounded-lg border border-[#1E293B]"><span class="text-[12px] font-medium text-slate-300 whitespace-nowrap">Decision Boundary Slider:</span><input class="w-full accent-[#06B6D4] h-1.5 bg-[#1E293B] rounded-lg cursor-pointer" max="0.99" min="0.10" step="0.01" type="range" value="0.70"><span class="font-mono text-[12px] font-bold text-[#06B6D4] px-2 py-0.5 bg-[#131D31] rounded border border-[#1E293B]">τ = 0.70</span></div></div></div>
+<!-- Right 40% (col-span-5): Confusion Matrix Breakdown -->
+<div class="lg:col-span-5 bg-[#131D31] border border-[#1E293B] rounded-lg p-5 flex flex-col justify-between"><div class="flex items-center justify-between pb-3 border-b border-[#1E293B]"><div><h2 class="text-[15px] font-bold text-white">Confusion Matrix Breakdown</h2><p class="text-[11px] text-slate-400 mt-0.5">Test cohort split (imbalanced fraud 6.5%)</p></div><span class="text-[11px] font-mono bg-[#0F172A] text-slate-300 px-2.5 py-1 rounded border border-[#1E293B] font-semibold">N = 2,964</span></div><div class="grid grid-cols-2 gap-3 my-3"><div class="p-3 bg-[#10B981]/10 border border-[#10B981]/30 rounded-lg flex flex-col justify-between"><div class="flex items-center justify-between text-[11px] font-semibold text-[#10B981]"><span class="tracking-wide">True Positives (TP)</span><span class="material-symbols-outlined text-[16px]">check_circle</span></div><div class="text-[22px] font-bold text-white my-1 leading-tight">172</div><div class="text-[11px] text-[#10B981] font-medium">Detected Fraudulent Cases</div></div><div class="p-3 bg-[#F59E0B]/10 border border-[#F59E0B]/30 rounded-lg flex flex-col justify-between"><div class="flex items-center justify-between text-[11px] font-semibold text-[#F59E0B]"><span class="tracking-wide">False Positives (FP)</span><span class="material-symbols-outlined text-[16px]">error_outline</span></div><div class="text-[22px] font-bold text-white my-1 leading-tight">14</div><div class="text-[11px] text-[#F59E0B] font-medium">False Alarms (Legit Blocked)</div></div><div class="p-3 bg-[#EF4444]/10 border border-[#EF4444]/30 rounded-lg flex flex-col justify-between"><div class="flex items-center justify-between text-[11px] font-semibold text-[#EF4444]"><span class="tracking-wide">False Negatives (FN)</span><span class="material-symbols-outlined text-[16px]">warning</span></div><div class="text-[22px] font-bold text-white my-1 leading-tight">23</div><div class="text-[11px] text-[#EF4444] font-medium">Missed Fraud Transactions</div></div><div class="p-3 bg-[#10B981]/10 border border-[#10B981]/30 rounded-lg flex flex-col justify-between"><div class="flex items-center justify-between text-[11px] font-semibold text-[#10B981]"><span class="tracking-wide">True Negatives (TN)</span><span class="material-symbols-outlined text-[16px]">verified</span></div><div class="text-[22px] font-bold text-white my-1 leading-tight">2,755</div><div class="text-[11px] text-[#10B981] font-medium">Legitimate Cleared Accurately</div></div></div><div class="p-3 bg-[#0F172A] rounded-lg border border-[#1E293B] flex flex-col gap-1.5"><div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Validation Summary: Fraud Class Performance</div><div class="flex items-center justify-between pt-0.5"><div class="flex flex-col"><span class="text-[11px] text-slate-400">Precision (Fraud)</span><span class="text-[16px] font-bold text-[#10B981]">92.4%</span></div><div class="h-6 w-[1px] bg-[#1E293B]"></div><div class="flex flex-col"><span class="text-[11px] text-slate-400">Recall (Fraud)</span><span class="text-[16px] font-bold text-[#06B6D4]">88.1%</span></div><div class="h-6 w-[1px] bg-[#1E293B]"></div><div class="flex flex-col"><span class="text-[11px] text-slate-400">Specificity</span><span class="text-[16px] font-bold text-slate-200">99.5%</span></div></div></div></div>
+</section>
+<!-- ===================================================== -->
+<!-- Bottom Section: Model Lifecycle & Training History    -->
+<!-- ===================================================== -->
+<section class="bg-[#131D31] border border-[#1E293B] rounded-lg p-5 space-y-3"><div class="flex items-center justify-between pb-2 border-b border-[#1E293B]"><div class="flex items-center gap-3"><h2 class="text-[15px] font-bold text-white">Model Lifecycle &amp; Training History</h2><span class="text-[11px] text-slate-400">Local Experiments (MLflow Tracked)</span></div><div class="flex items-center gap-2"><div class="flex items-center gap-1 bg-[#0F172A] px-2 py-1 rounded border border-[#1E293B] text-[11px]"><span class="text-slate-400">Branch:</span><span class="font-medium text-white">exp-smote-tuning</span><span class="material-symbols-outlined text-[14px]">arrow_drop_down</span></div><button class="h-7 px-2.5 bg-[#0F172A] text-slate-300 border border-[#1E293B] hover:bg-[#1E293B] rounded text-[11px] font-medium flex items-center gap-1" type="button"><span class="material-symbols-outlined text-[14px]">tune</span><span class="">Filter</span></button></div></div><div class="overflow-x-auto border border-[#1E293B] rounded"><table class="w-full text-left border-collapse text-[12px]"><thead><tr class="bg-[#0F172A] h-9 text-[11px] font-semibold text-slate-400 uppercase tracking-wider border-b border-[#1E293B]"><th class="px-4 py-2 font-semibold">Model &amp; Hash</th><th class="px-4 py-2 font-semibold">Training Setup &amp; Sampler</th><th class="px-4 py-2 font-semibold">Trained On</th><th class="px-4 py-2 text-center font-semibold">Status</th><th class="px-4 py-2 text-right font-semibold">Precision</th><th class="px-4 py-2 text-right font-semibold">Recall</th><th class="px-4 py-2 text-right font-semibold">ROC-AUC</th><th class="px-4 py-2 text-right font-semibold">Actions</th></tr></thead><tbody class="divide-y divide-[#1E293B]"><tr class="bg-[#131D31] hover:bg-[#1E293B]/40 transition-colors h-11"><td class="px-4 py-2 text-white font-semibold"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#10B981] text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="font-bold">Random Forest (Tuned + SMOTE)</span><span class="font-mono px-1.5 py-0.2 rounded bg-[#0F172A] text-slate-400 text-[10px] border border-[#1E293B]">#4a82e1</span></div></td><td class="px-4 py-2 text-slate-200">SMOTE (ratio=0.35), n_est=200, depth=14</td><td class="px-4 py-2 text-slate-400 font-mono text-[11px]">2025-02-18 09:30</td><td class="px-4 py-2 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#10B981]/15 text-[#10B981] font-semibold text-[11px] border border-[#10B981]/30"><span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>Active Model</span></td><td class="px-4 py-2 text-right text-white font-bold">92.4%</td><td class="px-4 py-2 text-right text-white font-bold">88.1%</td><td class="px-4 py-2 text-right text-white font-bold">0.942</td><td class="px-4 py-2 text-right"><button class="px-2.5 py-1 bg-[#0F172A] border border-[#1E293B] hover:bg-[#1E293B] text-white rounded text-[11px] font-semibold transition-colors" type="button">Inspect Metrics</button></td></tr><tr class="hover:bg-[#1E293B]/40 transition-colors h-11"><td class="px-4 py-2 text-white font-semibold"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#06B6D4] text-[16px]">science</span><span class="font-bold">Random Forest (Baseline)</span><span class="font-mono px-1.5 py-0.2 rounded bg-[#0F172A] text-slate-400 text-[10px] border border-[#1E293B]">#9f21b7</span></div></td><td class="px-4 py-2 text-slate-200">Unweighted class, n_est=100, default depth</td><td class="px-4 py-2 text-slate-400 font-mono text-[11px]">2025-02-16 14:10</td><td class="px-4 py-2 text-center"><span class="inline-flex items-center px-2 py-0.5 rounded bg-[#06B6D4]/15 text-[#06B6D4] font-semibold text-[11px] border border-[#06B6D4]/30">Baseline</span></td><td class="px-4 py-2 text-right text-slate-300">89.5%</td><td class="px-4 py-2 text-right text-slate-300">81.2%</td><td class="px-4 py-2 text-right text-slate-300">0.910</td><td class="px-4 py-2 text-right"><button class="px-2.5 py-1 bg-[#0F172A] border border-[#1E293B] hover:bg-[#1E293B] text-slate-300 rounded text-[11px] transition-colors" type="button">Inspect Metrics</button></td></tr><tr class="hover:bg-[#1E293B]/40 transition-colors h-11"><td class="px-4 py-2 text-slate-400"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-slate-500 text-[16px]">archive</span><span class="font-medium text-slate-300">Logistic Regression (Benchmark)</span><span class="font-mono px-1.5 py-0.2 rounded bg-[#0F172A] text-slate-400 text-[10px] border border-[#1E293B]">#3c70d4</span></div></td><td class="px-4 py-2 text-slate-400">Standard Scaler, L2 penalty (C=1.0)</td><td class="px-4 py-2 text-slate-400 font-mono text-[11px]">2025-02-14 11:22</td><td class="px-4 py-2 text-center"><span class="inline-flex items-center px-2 py-0.5 rounded bg-[#1E293B] text-slate-400 text-[11px] border border-slate-700">Archived</span></td><td class="px-4 py-2 text-right text-slate-400">83.1%</td><td class="px-4 py-2 text-right text-slate-400">74.6%</td><td class="px-4 py-2 text-right text-slate-400">0.865</td><td class="px-4 py-2 text-right"><button class="px-2.5 py-1 bg-[#0F172A] border border-[#1E293B] hover:bg-[#1E293B] text-slate-300 rounded text-[11px] transition-colors" type="button">Inspect Metrics</button></td></tr></tbody></table></div><div class="flex items-center justify-between text-[11px] text-slate-400 pt-1"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px] text-slate-500">folder</span><span class="">Artifacts: <code class="font-mono text-slate-300">./models/rf_smote_v1.2.pkl</code></span></div><div class="flex items-center gap-3"><span class="">Showing 3 model experiments</span></div></div></section>
+</main>
+</div>
+</div>
+
+
+</body></html>

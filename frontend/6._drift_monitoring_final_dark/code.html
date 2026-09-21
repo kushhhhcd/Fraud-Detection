@@ -1,0 +1,586 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SentinelML - Drift Monitoring &amp; Feature Distribution (PSI)</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          background: "#0B111E",
+          surface: "#131D31",
+          "surface-card": "#131D31",
+          "surface-border": "#1E293B",
+          "surface-dark": "#0B111E",
+          primary: "#06B6D4",
+          "primary-tint": "#4cd7f6",
+        },
+        fontFamily: {
+          sans: ["Inter", "sans-serif"],
+          mono: ["JetBrains Mono", "monospace"],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+  }
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0B111E;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1E293B;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
+</style>
+</head>
+<body class="bg-[#0B111E] text-[#F8FAFC] font-sans antialiased flex items-center justify-center min-h-screen">
+<!-- UNIFIED 1440x900 DESKTOP CANVAS CONTAINER -->
+<div class="w-[1440px] max-w-[1440px] h-[900px] overflow-hidden flex bg-[#0B111E] border border-[#1E293B] shadow-2xl relative">
+<!-- ================================================================= -->
+<!-- 1. LEFT SIDEBAR (w-64)                                            -->
+<!-- ================================================================= -->
+<aside class="w-64 h-full bg-[#0F172A] border-r border-[#1E293B] flex flex-col justify-between shrink-0 select-none z-20">
+<div class="flex flex-col">
+<!-- App Brand / Logo -->
+<div class="h-14 px-5 flex items-center gap-3 border-b border-[#1E293B]">
+<div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-[#4CD7F6]">
+<span class="material-symbols-outlined text-[20px]">shield</span>
+</div>
+<div class="flex flex-col"><span class="text-xs font-bold tracking-tight text-white uppercase">Fraud Detection &amp; Drift Monitoring</span>
+<span class="text-[10px] font-sans text-[#94A3B8] leading-none mt-0.5">Population Stability Index &amp; Feature Shift</span></div>
+</div>
+<!-- Navigation Links -->
+<nav class="p-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#94A3B8] hover:bg-[#131D31] hover:text-white transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span class="">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#94A3B8] hover:bg-[#131D31] hover:text-white transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+<span class="">Transactions</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-md text-[#94A3B8] hover:bg-[#131D31] hover:text-white transition-colors text-xs font-medium" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span class="">Alerts</span>
+</div>
+<span class="px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-mono font-semibold">3</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#94A3B8] hover:bg-[#131D31] hover:text-white transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">fact_check</span>
+<span class="">Cases</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#94A3B8] hover:bg-[#131D31] hover:text-white transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">health_and_safety</span>
+<span class="">Model Health</span>
+</a>
+<!-- ACTIVE TAB: Drift Monitoring -->
+<a class="flex items-center justify-between px-3 py-2 rounded-md bg-[#131D31] text-[#4CD7F6] border border-[#1E293B] border-r-2 border-r-[#06B6D4] text-xs font-semibold shadow-sm" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[18px] text-[#4CD7F6]">ssid_chart</span>
+<span class="text-white">Drift Monitoring</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-red-500 animate-pulse" title="1 Critical Drift Active"></span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#94A3B8] hover:bg-[#131D31] hover:text-white transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">manage_accounts</span>
+<span class="">User Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-[#94A3B8] hover:bg-[#131D31] hover:text-white transition-colors text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="">Settings</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Bottom / Simplified Profile & Status -->
+<div class="p-3 border-t border-[#1E293B] space-y-3">
+<!-- Emergency Circuit Breaker Button -->
+<div class="w-full h-8 px-3 rounded bg-[#131D31] text-[#94A3B8] border border-[#1E293B] font-sans text-xs flex items-center justify-between">
+<span class="flex items-center gap-1.5 text-white font-medium"><span class="material-symbols-outlined text-[16px] text-cyan-400">database</span> Database</span>
+<span class="font-mono text-cyan-400 text-[11px]">MySQL v8.0</span>
+</div>
+<!-- Worker Status Pill -->
+<div class="px-3 py-2 rounded bg-[#131D31] border border-[#1E293B] text-[11px] font-mono flex items-center justify-between text-[#94A3B8]">
+<span class="">Worker Pool #84A</span>
+<span class="text-emerald-400 font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 99.98%
+        </span>
+</div>
+<!-- Simplified Profile -->
+<div class="flex items-center gap-2.5 px-2 pt-1">
+<div class="w-7 h-7 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-[#4CD7F6] flex items-center justify-center text-xs font-bold font-mono">
+          FA
+        </div>
+<div class="flex flex-col">
+<span class="text-xs font-medium text-white leading-tight">Fraud Analytics</span>
+<span class="text-[10px] text-[#64748B]">sec-ops@sentinel.ai</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- ================================================================= -->
+<!-- 2. RIGHT WORKSPACE COLUMN (Topbar 56px + Scrollable Body)        -->
+<!-- ================================================================= -->
+<div class="flex-1 flex flex-col h-[900px] overflow-hidden bg-[#0B111E]">
+<!-- TOPBAR: 56px Header -->
+<header class="h-14 bg-[#0F172A] border-b border-[#1E293B] px-6 flex items-center justify-between shrink-0 z-10">
+<!-- Breadcrumbs & Model Pill -->
+<div class="flex items-center gap-3"><div class="flex items-center gap-1.5 text-xs font-sans">
+<span class="text-[#94A3B8]">Project</span>
+<span class="text-[#64748B]">/</span>
+<span class="text-white font-medium">Drift Monitoring &amp; Population Stability (PSI)</span>
+</div>
+<span class="px-2.5 py-0.5 rounded text-xs font-sans bg-cyan-950/60 text-[#4CD7F6] border border-cyan-800/60 font-medium">
+  Model: <span class="font-mono text-white">Random Forest (v1.0)</span> (Test Stream vs Training Baseline)
+</span></div>
+<!-- Actions: Date Range Selector + Trigger Retrain -->
+<div class="flex items-center gap-3">
+<!-- Date range selector -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded bg-[#0B111E] border border-[#1E293B] text-xs text-[#94A3B8]">
+<span class="material-symbols-outlined text-[16px] text-[#64748B]">date_range</span>
+<span class="">Live Window: <strong class="text-white font-normal font-mono">Last 7 Days</strong></span>
+<span class="material-symbols-outlined text-[14px] text-[#64748B]">arrow_drop_down</span>
+</div>
+<button class="h-8 px-3 rounded bg-[#131D31] border border-[#1E293B] text-[#94A3B8] hover:text-white text-xs font-medium transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">download</span>
+          Export
+        </button>
+<button class="h-8 px-3.5 rounded bg-[#06B6D4] hover:bg-cyan-400 text-[#003640] text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm shadow-cyan-950/50"><span class="material-symbols-outlined text-[16px] font-bold">refresh</span> Run Drift Check</button>
+</div>
+</header>
+<!-- SCROLLABLE BODY: h-[calc(900px-56px)] -->
+<main class="h-[calc(900px-56px)] overflow-y-auto p-6 space-y-6">
+<!-- ============================================================= -->
+<!-- SECTION 1: TOP SUMMARY BANNER & PSI GAUGE ROW                 -->
+<!-- ============================================================= -->
+<div class="grid grid-cols-12 gap-4 items-stretch">
+<!-- Left: Global Model PSI Card + Gauge -->
+<div class="col-span-4 bg-[#131D31] border border-[#1E293B] rounded-lg p-4 flex flex-col justify-between shadow-sm">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-[11px] font-mono uppercase tracking-wider text-[#94A3B8] font-semibold">Global Model PSI</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="text-3xl font-mono font-bold text-white tracking-tight">0.082</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-950/70 text-emerald-400 border border-emerald-800/70 text-[11px] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  STABLE (&lt; 0.10)
+                </span>
+</div>
+</div>
+<span class="text-[10px] font-mono text-[#64748B] px-1.5 py-0.5 rounded bg-[#0B111E] border border-[#1E293B]">20 Bins (FD)</span>
+</div>
+<!-- Visual Horizontal Gauge Indicator -->
+<div class="mt-3">
+<div class="w-full h-2 rounded-full bg-[#0B111E] border border-[#1E293B] flex overflow-hidden relative">
+<!-- Colored segments -->
+<div class="h-full bg-emerald-500/80 w-[40%]" title="Stable zone (0 - 0.10)"></div>
+<div class="h-full bg-amber-500/80 w-[30%]" title="Moderate zone (0.10 - 0.25)"></div>
+<div class="h-full bg-red-500/80 w-[30%]" title="Critical zone (&gt; 0.25)"></div>
+<!-- Gauge needle marker at 0.082 (approx 32.8% of 0.25 max visual scale) -->
+<div class="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_6px_#fff] z-10 -ml-0.5" style="left: 32.8%;"></div>
+</div>
+</div>
+<!-- Clear Reference Legend Scale -->
+<div class="flex items-center justify-between text-[10px] font-mono text-[#94A3B8] pt-3 border-t border-[#1E293B] mt-3">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400"></span>&lt;0.10 Stable</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span>0.10-0.25 Moderate</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-400"></span>&gt;0.25 Significant</span>
+</div>
+</div>
+<!-- Right: Drift Advisory Alert Callout -->
+<div class="col-span-8 bg-[#131D31] border border-amber-500/30 rounded-lg p-4 flex items-center justify-between shadow-sm relative overflow-hidden"><div class="absolute left-0 top-0 bottom-0 w-1.5 bg-amber-500"></div>
+<div class="flex items-center gap-3.5 pl-1">
+  <div class="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
+    <span class="material-symbols-outlined text-[22px]">notification_important</span>
+  </div>
+  <div>
+    <div class="flex items-center gap-2">
+      <h3 class="text-sm font-semibold text-white font-sans">Feature Distribution Shift Detected</h3>
+      <span class="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 text-[10px] font-sans border border-amber-500/30 font-medium">Requires Review</span>
+    </div>
+    <p class="text-xs text-[#94A3B8] mt-1 leading-normal font-sans">
+      <span class="text-emerald-400 font-medium">44 Stable</span>
+      <span class="mx-1 text-[#64748B]">|</span>
+      <span class="text-amber-400 font-medium">3 Moderate Shift</span>
+      <span class="mx-1 text-[#64748B]">|</span>
+      <span class="text-red-400 font-medium">1 Significant Drift: <code class="px-1.5 py-0.5 rounded bg-red-950/80 border border-red-800/80 text-red-300 font-mono text-[11px]">amt_ratio_to_avg</code></span>
+    </p>
+  </div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+  <button class="h-8 px-3 rounded bg-[#0B111E] border border-amber-500/40 text-amber-300 text-xs font-medium hover:bg-amber-500/10 transition-colors flex items-center gap-1.5 font-sans">
+    <span class="material-symbols-outlined text-[16px]">search</span>
+    Inspect Feature
+  </button>
+  <button class="h-8 px-3 rounded bg-[#1A263E] hover:bg-[#1E293B] border border-[#334155] text-white text-xs font-medium flex items-center gap-1.5 transition-colors font-sans">
+    <span class="material-symbols-outlined text-[16px] text-emerald-400">check</span>
+    Mark Reviewed
+  </button>
+</div></div>
+</div>
+<!-- ============================================================= -->
+<!-- SECTION 2: MIDDLE CHART (PSI Drift Trajectory - 30 Days)       -->
+<!-- ============================================================= -->
+<div class="bg-[#131D31] border border-[#1E293B] rounded-lg p-4 flex flex-col gap-3 shadow-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#06B6D4] text-[18px]">monitoring</span>
+<h2 class="text-sm font-semibold text-white">PSI Drift Trajectory across Feature Families (Rolling 30 Days)</h2>
+</div>
+<!-- Chart Legend -->
+<div class="flex items-center gap-4 text-xs font-medium"><div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-[#06B6D4]"></span>
+<span class="text-[#94A3B8] font-sans">Transaction Amounts</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-[#10B981]"></span>
+<span class="text-[#94A3B8] font-sans">Geographical Distances</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-[#A855F7]"></span>
+<span class="text-[#94A3B8] font-sans">Velocity / Frequency</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-[#F59E0B]"></span>
+<span class="text-[#94A3B8] font-sans">Time of Day</span>
+</div>
+<div class="h-3.5 w-[1px] bg-[#1E293B]"></div>
+<div class="flex items-center gap-1.5 text-amber-400 font-sans text-[11px]">
+<span class="w-3 border-b-2 border-dashed border-amber-500"></span>
+<span class="">0.10 Warning</span>
+</div>
+<div class="flex items-center gap-1.5 text-red-400 font-sans text-[11px]">
+<span class="w-3 border-b-2 border-dashed border-red-500"></span>
+<span class="">0.25 Significant</span>
+</div></div>
+</div>
+<!-- SVG Multi-Line Chart Viewport -->
+<div class="relative w-full h-44 bg-[#0B111E] border border-[#1E293B] rounded-md p-2 overflow-hidden">
+<!-- Threshold reference lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none p-3 pb-6">
+<!-- 0.25 Critical Line -->
+<div class="border-b border-dashed border-red-500/60 w-full relative flex items-center justify-end">
+<span class="bg-red-950/90 border border-red-800/80 text-red-300 text-[10px] font-mono px-1.5 py-0.5 rounded absolute -top-3 right-1">
+                Threshold: 0.25 Critical Line
+              </span>
+</div>
+<!-- 0.10 Warning Line -->
+<div class="border-b border-dashed border-amber-500/60 w-full relative flex items-center justify-end">
+<span class="bg-amber-950/90 border border-amber-800/80 text-amber-300 text-[10px] font-mono px-1.5 py-0.5 rounded absolute -top-3 right-1">
+                Threshold: 0.10 Warning Line
+              </span>
+</div>
+<div class="border-b border-[#1E293B]/60 w-full"></div>
+<div class="border-b border-[#1E293B] w-full"></div>
+</div>
+<!-- Multi-line SVG paths -->
+<svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 130">
+<!-- Categorical (cyan: ~0.04 - 0.07) -->
+<path d="M0,106 C150,102 300,108 450,100 C600,98 750,104 900,101 L1000,99" fill="none" stroke="#06B6D4" stroke-width="2"></path>
+<!-- Numerical (emerald: ~0.06 - 0.08) -->
+<path d="M0,110 C180,104 350,96 500,94 C650,90 800,97 900,93 L1000,91" fill="none" stroke="#10B981" stroke-width="2"></path>
+<!-- Device Telemetry (amber: stable low ~0.03) -->
+<path d="M0,120 C200,118 400,119 600,116 C750,118 880,117 L1000,115" fill="none" stroke="#F59E0B" stroke-width="2"></path>
+<!-- Geolocation / Velocity Drift (purple/red surge crossing 0.10 then 0.25) -->
+<path d="M0,102 C150,100 320,96 480,92 C600,85 700,75 780,50 C850,26 920,18 1000,14" fill="none" stroke="#A855F7" stroke-width="2.5"></path>
+<!-- Critical violation dot -->
+<circle cx="1000" cy="14" fill="#EF4444" r="5" stroke="#0B111E" stroke-width="2"></circle>
+<circle cx="780" cy="50" fill="#F59E0B" r="4" stroke="#0B111E" stroke-width="1.5"></circle>
+</svg>
+<!-- Timeline X-Axis markers -->
+<div class="absolute bottom-1 left-3 right-3 flex justify-between text-[11px] font-mono text-[#64748B]">
+<span class="">Day -30</span>
+<span class="">Day -22</span>
+<span class="">Day -15</span>
+<span class="text-amber-400/80">Day -7 (Anomaly Trigger)</span>
+<span class="text-red-400 font-bold">Today (0.282 PSI)</span>
+</div>
+</div>
+</div>
+<!-- ============================================================= -->
+<!-- SECTION 3: BOTTOM 2-COLUMN SECTION (60% Table + 40% Overlay)   -->
+<!-- ============================================================= -->
+<div class="grid grid-cols-12 gap-4 items-start pb-2">
+<!-- LEFT COLUMN (60% -> col-span-7): Monitored Feature Distributions -->
+<div class="col-span-7 bg-[#131D31] border border-[#1E293B] rounded-lg flex flex-col shadow-sm overflow-hidden">
+<!-- Table Header / Search & Filter Controls -->
+<div class="px-4 py-2.5 bg-[#0F172A] border-b border-[#1E293B] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="text-xs font-semibold text-white">Monitored Feature Distributions (48 Active)</span>
+</div>
+<div class="flex items-center gap-2">
+<!-- Search box -->
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2 text-[14px] text-[#64748B]">search</span>
+<input class="h-6 pl-7 pr-2 text-xs bg-[#0B111E] border border-[#1E293B] rounded w-44 text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#06B6D4]" placeholder="Search features..." type="text">
+</div>
+<!-- Status filter -->
+<select class="h-6 px-2 text-xs bg-[#0B111E] border border-[#1E293B] rounded text-[#94A3B8] focus:outline-none focus:border-[#06B6D4]">
+<option>All Drift Statuses</option>
+<option>Significant Drift (&gt;0.25)</option>
+<option>Moderate Drift (0.10-0.25)</option>
+<option>Stable (&lt;0.10)</option>
+</select>
+</div>
+</div>
+<!-- Features Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-xs">
+<thead>
+<tr class="bg-[#0F172A]/70 text-[#64748B] font-mono text-[10px] uppercase font-semibold h-8 border-b border-[#1E293B]">
+<th class="px-3">Feature Name</th>
+<th class="px-2">Category</th>
+<th class="px-2 text-right">Baseline (Mean, Std)</th>
+<th class="px-2 text-right">Live Window (Mean, Std)</th>
+<th class="px-2 text-right">PSI Score</th>
+<th class="px-3 text-center">Drift Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#1E293B]"><!-- ROW 1: amt_ratio_to_avg (Moderate / Selected) -->
+<tr class="bg-amber-950/20 hover:bg-amber-950/30 transition-colors h-11 border-l-2 border-l-amber-500 cursor-pointer">
+  <td class="px-3 font-mono text-xs text-amber-300 font-medium flex items-center gap-1.5 pt-3">
+    <span class="material-symbols-outlined text-amber-400 text-[15px]">warning</span>
+    amt_ratio_to_avg
+  </td>
+  <td class="px-2 font-sans text-xs text-[#94A3B8]">Transaction Amounts</td>
+  <td class="px-2 text-right font-mono text-[11px] text-[#64748B]">μ: 1.12, σ: 0.38</td>
+  <td class="px-2 text-right font-mono text-[11px] text-white font-medium">μ: 2.45, σ: 0.94</td>
+  <td class="px-2 text-right font-mono text-xs font-bold text-amber-400">0.141</td>
+  <td class="px-3 text-center">
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-800/80 text-[10px] font-sans font-medium">
+      <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+      Moderate
+    </span>
+  </td>
+</tr>
+<!-- ROW 2: distance_from_home_km (Stable) -->
+<tr class="hover:bg-[#1A263E]/40 transition-colors h-11 cursor-pointer">
+  <td class="px-3 font-mono text-xs text-white font-normal flex items-center gap-1.5 pt-3">
+    <span class="material-symbols-outlined text-emerald-400 text-[15px]">check_circle</span>
+    distance_from_home_km
+  </td>
+  <td class="px-2 font-sans text-xs text-[#94A3B8]">Geographical Distances</td>
+  <td class="px-2 text-right font-mono text-[11px] text-[#64748B]">μ: 24.8, σ: 14.1</td>
+  <td class="px-2 text-right font-mono text-[11px] text-[#CBD5E1]">μ: 26.2, σ: 15.0</td>
+  <td class="px-2 text-right font-mono text-xs text-emerald-400 font-medium">0.038</td>
+  <td class="px-3 text-center">
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/70 text-[10px] font-sans font-medium">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+      Stable
+    </span>
+  </td>
+</tr>
+<!-- ROW 3: trans_freq_past_24h (Significant Shift) -->
+<tr class="hover:bg-[#1A263E]/40 transition-colors h-11 cursor-pointer">
+  <td class="px-3 font-mono text-xs text-red-300 font-normal flex items-center gap-1.5 pt-3">
+    <span class="material-symbols-outlined text-red-400 text-[15px]">error</span>
+    trans_freq_past_24h
+  </td>
+  <td class="px-2 font-sans text-xs text-[#94A3B8]">Velocity / Frequency</td>
+  <td class="px-2 text-right font-mono text-[11px] text-[#64748B]">μ: 3.2, σ: 1.4</td>
+  <td class="px-2 text-right font-mono text-[11px] text-white">μ: 7.8, σ: 2.9</td>
+  <td class="px-2 text-right font-mono text-xs font-bold text-red-400">0.264</td>
+  <td class="px-3 text-center">
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-950/80 text-red-300 border border-red-800/80 text-[10px] font-sans font-medium">
+      <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+      Significant
+    </span>
+  </td>
+</tr>
+<!-- ROW 4: hour_sin_cos_vector (Stable) -->
+<tr class="hover:bg-[#1A263E]/40 transition-colors h-11 cursor-pointer">
+  <td class="px-3 font-mono text-xs text-white font-normal flex items-center gap-1.5 pt-3">
+    <span class="material-symbols-outlined text-emerald-400 text-[15px]">check_circle</span>
+    hour_of_day_norm
+  </td>
+  <td class="px-2 font-sans text-xs text-[#94A3B8]">Time of Day</td>
+  <td class="px-2 text-right font-mono text-[11px] text-[#64748B]">μ: 0.52, σ: 0.28</td>
+  <td class="px-2 text-right font-mono text-[11px] text-[#CBD5E1]">μ: 0.54, σ: 0.27</td>
+  <td class="px-2 text-right font-mono text-xs text-emerald-400 font-medium">0.016</td>
+  <td class="px-3 text-center">
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/70 text-[10px] font-sans font-medium">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+      Stable
+    </span>
+  </td>
+</tr>
+<!-- ROW 5: repeat_merchant_ratio (Moderate) -->
+<tr class="hover:bg-[#1A263E]/40 transition-colors h-11 cursor-pointer">
+  <td class="px-3 font-mono text-xs text-white font-normal flex items-center gap-1.5 pt-3">
+    <span class="material-symbols-outlined text-amber-400 text-[15px]">warning</span>
+    repeat_merchant_ratio
+  </td>
+  <td class="px-2 font-sans text-xs text-[#94A3B8]">Transaction Amounts</td>
+  <td class="px-2 text-right font-mono text-[11px] text-[#64748B]">μ: 0.68, σ: 0.21</td>
+  <td class="px-2 text-right font-mono text-[11px] text-[#CBD5E1]">μ: 0.51, σ: 0.25</td>
+  <td class="px-2 text-right font-mono text-xs text-amber-400 font-medium">0.115</td>
+  <td class="px-3 text-center">
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-800/80 text-[10px] font-sans font-medium">
+      <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+      Moderate
+    </span>
+  </td>
+</tr></tbody>
+</table>
+</div>
+<!-- Table Footer Pagination -->
+<div class="h-9 px-3 border-t border-[#1E293B] flex items-center justify-between text-xs font-mono text-[#64748B] bg-[#0F172A]">
+<span class="">Showing 5 of 48 calibrated features</span>
+<div class="flex items-center gap-1">
+<button class="px-2 py-0.5 rounded border border-[#1E293B] bg-[#0B111E] text-[#64748B] opacity-50 cursor-not-allowed text-[11px]" disabled="">Prev</button>
+<span class="px-2 py-0.5 rounded bg-[#1E293B] text-white font-semibold text-[11px]">1</span>
+<button class="px-2 py-0.5 rounded border border-[#1E293B] bg-[#0B111E] text-[#94A3B8] hover:bg-[#1A263E] text-[11px]">2</button>
+<button class="px-2 py-0.5 rounded border border-[#1E293B] bg-[#0B111E] text-[#94A3B8] hover:bg-[#1A263E] text-[11px]">Next</button>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN (40% -> col-span-5): Feature Distribution Overlay Histogram -->
+<div class="col-span-5 bg-[#131D31] border border-[#1E293B] rounded-lg p-4 flex flex-col gap-3 shadow-sm"><!-- Overlay Header -->
+<div class="flex items-start justify-between pb-2.5 border-b border-[#1E293B]">
+  <div>
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-amber-400 text-[18px]">bar_chart</span>
+      <h3 class="text-xs font-bold text-white font-sans">Feature Distribution Overlay</h3>
+    </div>
+    <p class="font-sans text-[11px] text-[#94A3B8] mt-0.5">Feature: <span class="font-mono text-cyan-400">amt_ratio_to_avg</span></p>
+  </div>
+  <span class="px-2 py-0.5 rounded bg-amber-950/70 text-amber-300 border border-amber-800/80 text-[10px] font-sans font-medium">
+    PSI: <span class="font-mono font-bold">0.141</span> (Moderate Shift)
+  </span>
+</div>
+
+<!-- Histogram Graph Area -->
+<div class="flex flex-col gap-1.5">
+  <div class="flex items-center justify-between text-xs text-[#94A3B8] font-sans">
+    <span class="text-[11px]">Frequency Density vs Bin Range</span>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-sm bg-[#334155] border border-[#475569]"></span>
+        <span class="text-[#94A3B8] text-[10px]">Baseline Training Set</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-sm bg-amber-500 border border-amber-400"></span>
+        <span class="text-amber-400 font-medium text-[10px]">Recent Ingestion</span>
+      </div>
+    </div>
+  </div>
+  <!-- Binned frequency bars -->
+  <div class="relative w-full h-44 bg-[#0B111E] border border-[#1E293B] rounded p-2 flex flex-col justify-end">
+    <div class="flex items-end justify-between h-32 gap-1 px-1 relative z-10">
+      <!-- Bin 1 (0.0 - 0.5x) -->
+      <div class="flex-1 flex items-end justify-center gap-1 h-full">
+        <div class="w-1/2 bg-[#334155] rounded-t" style="height: 70%;" title="Baseline: 70%"></div>
+        <div class="w-1/2 bg-amber-500/80 rounded-t" style="height: 35%;" title="Live: 35%"></div>
+      </div>
+      <!-- Bin 2 (0.5 - 1.0x) -->
+      <div class="flex-1 flex items-end justify-center gap-1 h-full">
+        <div class="w-1/2 bg-[#334155] rounded-t" style="height: 85%;" title="Baseline: 85%"></div>
+        <div class="w-1/2 bg-amber-500/80 rounded-t" style="height: 50%;" title="Live: 50%"></div>
+      </div>
+      <!-- Bin 3 (1.0 - 1.5x) -->
+      <div class="flex-1 flex items-end justify-center gap-1 h-full">
+        <div class="w-1/2 bg-[#334155] rounded-t" style="height: 60%;" title="Baseline: 60%"></div>
+        <div class="w-1/2 bg-amber-500 rounded-t" style="height: 65%;" title="Live: 65%"></div>
+      </div>
+      <!-- Bin 4 (1.5 - 2.0x) -->
+      <div class="flex-1 flex items-end justify-center gap-1 h-full">
+        <div class="w-1/2 bg-[#334155] rounded-t" style="height: 30%;" title="Baseline: 30%"></div>
+        <div class="w-1/2 bg-amber-500 rounded-t" style="height: 80%;" title="Live: 80%"></div>
+      </div>
+      <!-- Bin 5 (2.0 - 3.0x) -->
+      <div class="flex-1 flex items-end justify-center gap-1 h-full">
+        <div class="w-1/2 bg-[#334155] rounded-t" style="height: 15%;" title="Baseline: 15%"></div>
+        <div class="w-1/2 bg-amber-500 rounded-t" style="height: 60%;" title="Live: 60%"></div>
+      </div>
+      <!-- Bin 6 (3.0 - 4.0x) -->
+      <div class="flex-1 flex items-end justify-center gap-1 h-full">
+        <div class="w-1/2 bg-[#334155] rounded-t" style="height: 8%;" title="Baseline: 8%"></div>
+        <div class="w-1/2 bg-amber-500/80 rounded-t" style="height: 32%;" title="Live: 32%"></div>
+      </div>
+      <!-- Bin 7 (4.0 - 5.0x) -->
+      <div class="flex-1 flex items-end justify-center gap-1 h-full">
+        <div class="w-1/2 bg-[#334155] rounded-t" style="height: 4%;" title="Baseline: 4%"></div>
+        <div class="w-1/2 bg-amber-500/80 rounded-t" style="height: 18%;" title="Live: 18%"></div>
+      </div>
+      <!-- Bin 8 (5.0x+) -->
+      <div class="flex-1 flex items-end justify-center gap-1 h-full">
+        <div class="w-1/2 bg-[#334155] rounded-t" style="height: 2%;" title="Baseline: 2%"></div>
+        <div class="w-1/2 bg-amber-500/80 rounded-t" style="height: 10%;" title="Live: 10%"></div>
+      </div>
+    </div>
+    <!-- Bin labels -->
+    <div class="flex justify-between text-[10px] font-mono text-[#64748B] border-t border-[#1E293B] pt-1 px-1">
+      <span class="">0.0x</span>
+      <span class="">1.0x</span>
+      <span class="">2.0x</span>
+      <span class="">3.0x</span>
+      <span class="">4.0x</span>
+      <span class="">5.0x+</span>
+    </div>
+  </div>
+</div>
+
+<!-- Statistical Tests Details -->
+<div class="grid grid-cols-2 gap-2 pt-1 font-sans">
+  <div class="p-2 rounded bg-[#0B111E] border border-[#1E293B] flex flex-col">
+    <span class="text-[9px] text-[#64748B] uppercase tracking-wider font-semibold">Kolmogorov-Smirnov Test</span>
+    <span class="text-xs font-mono font-bold text-amber-400">p = 0.042 (p &lt; 0.05)</span>
+    <span class="text-[10px] text-[#94A3B8]">Significant distributional divergence</span>
+  </div>
+  <div class="p-2 rounded bg-[#0B111E] border border-[#1E293B] flex flex-col">
+    <span class="text-[9px] text-[#64748B] uppercase tracking-wider font-semibold">Wasserstein Distance</span>
+    <span class="text-xs font-mono font-bold text-white">1.33</span>
+    <span class="text-[10px] text-[#94A3B8]">Moderate earth-mover metric</span>
+  </div>
+</div>
+
+<!-- Student Action Box -->
+<div class="p-2.5 rounded bg-[#0F172A] border border-[#1E293B] flex flex-col gap-1.5 font-sans">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-1.5 text-white text-xs font-medium">
+      <span class="material-symbols-outlined text-[15px] text-cyan-400">tune</span>
+      <span class="">Feature Shift Evaluation</span>
+    </div>
+    <span class="text-[10px] text-[#94A3B8]">Evaluated on test stream</span>
+  </div>
+  <p class="text-[11px] text-[#CBD5E1] leading-relaxed">
+    Rightward skew detected in <code class="font-mono text-[10px] text-[#4CD7F6] bg-[#0B111E] px-1 py-0.5 rounded border border-[#1E293B]">amt_ratio_to_avg</code> relative to the baseline training set. Confirm if threshold adjustment is needed for Random Forest decision trees.
+  </p>
+  <div class="flex items-center justify-end gap-2 pt-1">
+    <button class="px-2.5 py-1 rounded bg-[#131D31] hover:bg-[#1E293B] border border-[#334155] text-white text-xs font-medium transition-colors">
+      Inspect Feature
+    </button>
+    <button class="px-2.5 py-1 rounded bg-[#06B6D4] hover:bg-cyan-400 text-[#003640] text-xs font-semibold transition-colors">
+      Mark Reviewed
+    </button>
+  </div>
+</div></div>
+</div>
+</main>
+</div>
+</div>
+
+
+</body></html>

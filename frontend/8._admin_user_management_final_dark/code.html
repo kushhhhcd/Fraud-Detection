@@ -1,0 +1,497 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Fraud Detection &amp; Drift Monitoring - User Management &amp; Access Control</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          background: "#0B111E",
+          surface: "#131D31",
+          "surface-alt": "#0F172A",
+          "surface-border": "#1E293B",
+          "surface-hover": "#16223A",
+          primary: "#06B6D4",
+          "primary-hover": "#22D3EE",
+          "on-surface": "#F1F5F9",
+          "on-surface-variant": "#94A3B8"
+        },
+        fontFamily: {
+          sans: ["Inter", "sans-serif"],
+          mono: ["JetBrains Mono", "monospace"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* Custom scrollbar for clean dashboard view */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0B111E;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1E293B;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
+</style>
+</head>
+<body class="bg-[#0B111E] text-slate-100 font-sans antialiased flex justify-center items-center min-h-screen">
+<!-- 1440x900 Main Application Container Viewport -->
+<div class="w-[1440px] max-w-[1440px] h-[900px] overflow-hidden flex flex-row bg-[#0B111E] border border-[#1E293B] shadow-2xl relative">
+<!-- ==================== UNIFIED SIDEBAR (w-64) ==================== -->
+<aside class="w-64 h-full bg-[#0F172A] border-r border-[#1E293B] flex flex-col justify-between shrink-0 select-none">
+<div class="flex flex-col">
+<!-- Logo / System ID -->
+<div class="h-14 px-5 flex items-center gap-3 border-b border-[#1E293B]">
+<div class="w-8 h-8 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">shield</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-white tracking-tight text-base leading-tight">SentinelML</span>
+<span class="font-mono text-[11px] text-slate-400">Fraud ML Platform</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="p-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-slate-400 hover:text-slate-100 hover:bg-[#131D31] text-xs font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span class="">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-slate-400 hover:text-slate-100 hover:bg-[#131D31] text-xs font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+<span class="">Live Transactions</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-slate-400 hover:text-slate-100 hover:bg-[#131D31] text-xs font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">rule</span>
+<span class="">Fraud Investigations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-slate-400 hover:text-slate-100 hover:bg-[#131D31] text-xs font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">query_stats</span>
+<span class="">Model Performance</span>
+</a>
+<!-- Active Tab: Admin & Users -->
+<a class="flex items-center gap-3 px-3 py-2 rounded bg-[#131D31] text-cyan-400 border-r-2 border-cyan-400 text-xs font-semibold" href="#">
+<span class="material-symbols-outlined text-[18px]">manage_accounts</span>
+<span class="">Admin &amp; Users</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-slate-400 hover:text-slate-100 hover:bg-[#131D31] text-xs font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="">Decision Cutoffs</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Bottom Profile / Session Badge -->
+<div class="p-3 border-t border-[#1E293B]">
+<div class="p-2.5 rounded bg-[#131D31] border border-[#1E293B] flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center font-bold text-xs font-mono">
+          AD
+        </div>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="text-xs font-semibold text-white truncate">Alex Mercer</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span class="text-[10px] text-cyan-300 font-mono">Logged in as: Admin</span>
+</div>
+</div>
+<button class="text-slate-400 hover:text-white" title="Account settings">
+<span class="material-symbols-outlined text-[16px]">more_vert</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- ==================== MAIN CONTENT AREA ==================== -->
+<div class="flex-1 h-full flex flex-col min-w-0 bg-[#0B111E]">
+<!-- ==================== UNIFIED TOPBAR (h-[56px]) ==================== -->
+<header class="h-14 px-6 bg-[#0F172A] border-b border-[#1E293B] flex items-center justify-between shrink-0">
+<!-- Breadcrumb Navigation -->
+<div class="flex items-center gap-2 text-xs">
+<span class="font-semibold text-slate-400 uppercase tracking-wider">SentinelML</span>
+<span class="text-slate-600">/</span>
+<span class="font-semibold text-white">User Management &amp; Role Permissions</span>
+</div>
+<!-- Search & Primary Actions -->
+<div class="flex items-center gap-3">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[16px] text-slate-400">search</span>
+<input class="h-8 w-full pl-8 pr-3 text-xs bg-[#131D31] border border-[#1E293B] text-white placeholder-slate-400 rounded focus:border-cyan-400 focus:outline-none focus:ring-0" placeholder="Search user directory..." type="text">
+</div>
+<button class="h-8 px-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs rounded flex items-center gap-1.5 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]">person_add</span>
+<span class="">Add New User</span>
+</button>
+</div>
+</header>
+<!-- Content Workspace Container (scrollable if needed) -->
+<div class="flex-1 p-6 overflow-y-auto flex flex-col gap-5">
+<!-- ==================== TOP STAT CARDS (3 Cards) ==================== -->
+<div class="grid grid-cols-3 gap-4 shrink-0">
+<!-- Card 1: Total Users -->
+<div class="p-4 rounded bg-[#131D31] border border-[#1E293B] flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Users</span>
+<span class="material-symbols-outlined text-cyan-400 text-[18px]">group</span>
+</div>
+<div class="mt-2 flex items-baseline justify-between">
+<span class="text-xl font-bold text-white font-mono">12 Active Users</span>
+<span class="text-[11px] font-mono text-cyan-300 bg-cyan-950/70 border border-cyan-800/40 px-2 py-0.5 rounded">3 Admins · 9 Fraud Analysts</span>
+</div>
+<span class="text-[11px] text-slate-400 mt-2 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Local Authentication (MySQL hashed credentials)</span>
+</div>
+<!-- Card 2: Active Sessions -->
+<div class="p-4 rounded bg-[#131D31] border border-[#1E293B] flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Active Sessions</span>
+<span class="material-symbols-outlined text-emerald-400 text-[18px]">wifi_tethering</span>
+</div>
+<div class="mt-2 flex items-baseline justify-between">
+<span class="text-xl font-bold text-white font-mono">4 Concurrent Sessions</span>
+<span class="text-[11px] font-mono text-emerald-300 bg-emerald-950/60 border border-emerald-800/40 px-2 py-0.5 rounded">1 Admin · 3 Analysts</span>
+</div>
+<span class="text-[11px] text-slate-400 mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-slate-400">schedule</span>
+            Average session length: 34 minutes
+          </span>
+</div>
+<!-- Card 3: Model Action Audit -->
+<div class="p-4 rounded bg-[#131D31] border border-[#1E293B] flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Model Action Audit</span>
+<span class="material-symbols-outlined text-cyan-400 text-[18px]">history</span>
+</div>
+<div class="mt-2 flex items-baseline justify-between">
+<span class="text-xl font-bold text-white font-mono">18 Model Action Logs</span>
+<span class="text-[11px] font-mono text-cyan-300 bg-cyan-950/70 border border-cyan-800/40 px-2 py-0.5 rounded">Past 7 Days</span>
+</div>
+<span class="text-[11px] text-slate-400 mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-cyan-400">bolt</span>
+            14 Dispositions submitted, 4 Retrain runs initiated
+          </span>
+</div>
+</div>
+<!-- ==================== MAIN 2-COLUMN SPLIT ==================== -->
+<div class="flex-1 grid grid-cols-12 gap-5 min-h-0 items-start">
+<!-- ==================== LEFT SIDE (60% / 7 cols): User Directory Table ==================== -->
+<div class="col-span-7 bg-[#131D31] border border-[#1E293B] rounded flex flex-col overflow-hidden">
+<!-- Table Header / Title Bar -->
+<div class="px-4 py-3 border-b border-[#1E293B] bg-[#0F172A] flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-[18px]">people</span>
+<span class="text-xs font-semibold text-white uppercase tracking-wider">User Directory</span>
+<span class="text-[11px] text-slate-400 font-mono">(Showing 5 of 12 Users)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[11px] text-slate-400">Role Filter:</span>
+<select class="h-6 pl-2 pr-6 text-[11px] font-medium bg-[#131D31] border border-[#1E293B] text-slate-300 rounded focus:ring-0 focus:border-cyan-400 py-0">
+<option>All Roles (Admin &amp; Analyst)</option>
+<option>Admins only</option>
+<option>Analysts only</option>
+</select>
+</div>
+</div>
+<!-- Table Content -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#0B111E]/60 border-b border-[#1E293B] text-slate-400 font-medium text-[11px] uppercase tracking-wider">
+<th class="py-2.5 px-3.5">User</th>
+<th class="py-2.5 px-3">Role</th>
+<th class="py-2.5 px-3">Assigned Scope</th>
+<th class="py-2.5 px-3">Last Active</th>
+<th class="py-2.5 px-3">Status</th>
+<th class="py-2.5 px-3 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#1E293B] text-xs">
+<!-- Row 1: Sarah Kowalski (Selected Target) -->
+<tr class="bg-[#16223A] border-l-2 border-l-cyan-400 transition-colors">
+<td class="py-2.5 px-3.5">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/40 flex items-center justify-center font-bold text-[11px] font-mono">
+                        SK
+                      </div>
+<div class="flex flex-col">
+<span class="font-semibold text-white">Sarah Kowalski</span>
+<span class="text-[11px] text-slate-400 font-mono">s.kowalski@sentinel.edu</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-950/70 text-blue-300 border border-blue-800/40">
+                      Analyst
+                    </span>
+</td>
+<td class="py-2.5 px-3 text-slate-300 text-[11px]">
+                    Case Investigation &amp; Queue
+                  </td>
+<td class="py-2.5 px-3 text-slate-300 font-mono text-[11px]">
+                    5m ago
+                  </td>
+<td class="py-2.5 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-[11px] text-emerald-300">Active</span>
+</div>
+</td>
+<td class="py-2.5 px-3 text-right">
+<button class="px-2 py-1 bg-cyan-500 text-slate-950 rounded text-[11px] font-semibold hover:bg-cyan-400 transition-colors">
+                      Editing
+                    </button>
+</td>
+</tr>
+<!-- Row 2: Alex Mercer -->
+<tr class="hover:bg-[#16223A]/70 transition-colors">
+<td class="py-2.5 px-3.5">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded bg-cyan-950/50 text-cyan-400 border border-cyan-700/40 flex items-center justify-center font-bold text-[11px] font-mono">
+                        AM
+                      </div>
+<div class="flex flex-col">
+<span class="font-semibold text-white">Alex Mercer (You)</span>
+<span class="text-[11px] text-slate-400 font-mono">a.mercer@sentinel.edu</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-cyan-950/80 text-cyan-300 border border-cyan-700/50">
+                      Admin
+                    </span>
+</td>
+<td class="py-2.5 px-3 text-slate-300 text-[11px]">
+                    Full Model Governance
+                  </td>
+<td class="py-2.5 px-3 text-slate-300 font-mono text-[11px]">
+                    Now
+                  </td>
+<td class="py-2.5 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-[11px] text-emerald-300">Active</span>
+</div>
+</td>
+<td class="py-2.5 px-3 text-right">
+<button class="px-2 py-1 bg-[#0F172A] border border-[#1E293B] text-slate-300 rounded text-[11px] font-medium hover:text-white hover:bg-[#1E293B] transition-colors">
+                      Edit Permissions
+                    </button>
+</td>
+</tr>
+<!-- Row 3: David Chen -->
+<tr class="hover:bg-[#16223A]/70 transition-colors">
+<td class="py-2.5 px-3.5">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded bg-slate-800 text-slate-200 border border-slate-700 flex items-center justify-center font-bold text-[11px] font-mono">
+                        DC
+                      </div>
+<div class="flex flex-col">
+<span class="font-semibold text-white">David Chen</span>
+<span class="text-[11px] text-slate-400 font-mono">d.chen@sentinel.edu</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-cyan-950/80 text-cyan-300 border border-cyan-700/50">
+                      Admin
+                    </span>
+</td>
+<td class="py-2.5 px-3 text-slate-300 text-[11px]">
+                    Full Model Governance
+                  </td>
+<td class="py-2.5 px-3 text-slate-300 font-mono text-[11px]">
+                    1h ago
+                  </td>
+<td class="py-2.5 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-[11px] text-emerald-300">Active</span>
+</div>
+</td>
+<td class="py-2.5 px-3 text-right">
+<button class="px-2 py-1 bg-[#0F172A] border border-[#1E293B] text-slate-300 rounded text-[11px] font-medium hover:text-white hover:bg-[#1E293B] transition-colors">
+                      Edit Permissions
+                    </button>
+</td>
+</tr>
+<!-- Row 4: Elena Martinez -->
+<tr class="hover:bg-[#16223A]/70 transition-colors">
+<td class="py-2.5 px-3.5">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded bg-slate-800 text-slate-200 border border-slate-700 flex items-center justify-center font-bold text-[11px] font-mono">
+                        EM
+                      </div>
+<div class="flex flex-col">
+<span class="font-semibold text-white">Elena Martinez</span>
+<span class="text-[11px] text-slate-400 font-mono">e.martinez@sentinel.edu</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-950/70 text-blue-300 border border-blue-800/40">
+                      Analyst
+                    </span>
+</td>
+<td class="py-2.5 px-3 text-slate-300 text-[11px]">
+                    Case Investigation &amp; Queue
+                  </td>
+<td class="py-2.5 px-3 text-slate-300 font-mono text-[11px]">
+                    Today
+                  </td>
+<td class="py-2.5 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-[11px] text-emerald-300">Active</span>
+</div>
+</td>
+<td class="py-2.5 px-3 text-right">
+<button class="px-2 py-1 bg-[#0F172A] border border-[#1E293B] text-slate-300 rounded text-[11px] font-medium hover:text-white hover:bg-[#1E293B] transition-colors">
+                      Edit Permissions
+                    </button>
+</td>
+</tr>
+<!-- Row 5: Jordan Lee -->
+<tr class="hover:bg-[#16223A]/70 transition-colors">
+<td class="py-2.5 px-3.5">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded bg-slate-800 text-slate-200 border border-slate-700 flex items-center justify-center font-bold text-[11px] font-mono">
+                        JL
+                      </div>
+<div class="flex flex-col">
+<span class="font-semibold text-white">Jordan Lee</span>
+<span class="text-[11px] text-slate-400 font-mono">j.lee@sentinel.edu</span>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-950/70 text-blue-300 border border-blue-800/40">
+                      Analyst
+                    </span>
+</td>
+<td class="py-2.5 px-3 text-slate-300 text-[11px]">
+                    Case Investigation &amp; Queue
+                  </td>
+<td class="py-2.5 px-3 text-slate-300 font-mono text-[11px]">
+                    Yesterday
+                  </td>
+<td class="py-2.5 px-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-[11px] text-emerald-300">Active</span>
+</div>
+</td>
+<td class="py-2.5 px-3 text-right">
+<button class="px-2 py-1 bg-[#0F172A] border border-[#1E293B] text-slate-300 rounded text-[11px] font-medium hover:text-white hover:bg-[#1E293B] transition-colors">
+                      Edit Permissions
+                    </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer -->
+<div class="px-4 py-2 bg-[#0F172A] border-t border-[#1E293B] flex items-center justify-between text-[11px] text-slate-400 font-mono">
+<span class="">Showing Page 1 of 3</span>
+<div class="flex items-center gap-1">
+<button class="px-2 py-0.5 rounded bg-[#131D31] border border-[#1E293B] text-slate-500 cursor-not-allowed">Prev</button>
+<button class="px-2 py-0.5 rounded bg-cyan-500 text-slate-950 font-bold">1</button>
+<button class="px-2 py-0.5 rounded bg-[#131D31] border border-[#1E293B] text-slate-300 hover:text-white">2</button>
+<button class="px-2 py-0.5 rounded bg-[#131D31] border border-[#1E293B] text-slate-300 hover:text-white">3</button>
+<button class="px-2 py-0.5 rounded bg-[#131D31] border border-[#1E293B] text-slate-300 hover:text-white">Next</button>
+</div>
+</div>
+</div>
+<!-- ==================== RIGHT SIDE (40% / 5 cols): Clean RBAC Drawer Panel ==================== -->
+<div class="col-span-5 bg-[#131D31] border border-[#1E293B] rounded flex flex-col overflow-hidden shadow-lg">
+<!-- Drawer Header -->
+<div class="p-4 bg-[#0F172A] border-b border-[#1E293B] flex items-start justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5 text-cyan-400 mb-1">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span class="text-[11px] font-mono uppercase tracking-wider font-semibold">User Privilege Configuration</span>
+</div>
+<h3 class="text-sm font-bold text-white leading-tight">Configure User: Sarah Kowalski</h3>
+<span class="text-xs text-slate-400 mt-0.5 font-mono">Fraud Analyst — <span class="font-mono text-slate-400">s.kowalski@sentinel.edu</span></span>
+</div>
+<button class="text-slate-400 hover:text-white p-1 rounded hover:bg-[#1E293B]" title="Close panel">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Drawer Body Content -->
+<div class="p-4 space-y-4">
+<!-- Section 1: Simplified 2-Role Choice -->
+<div>
+<label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                Assigned Role (Select One)
+              </label>
+<div class="space-y-2">
+<!-- Option 1: Admin Role -->
+<label class="p-3 border border-[#1E293B] bg-[#0B111E]/60 rounded flex items-start gap-3 cursor-pointer hover:border-cyan-500/40 hover:bg-[#16223A]/40 transition-colors">
+<input class="mt-0.5 text-cyan-400 bg-[#0B111E] border-[#1E293B] focus:ring-0 cursor-pointer" name="project_role" type="radio">
+<div class="flex flex-col flex-1">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-white">Admin</span>
+<span class="text-[10px] font-mono text-cyan-300 bg-cyan-950/80 border border-cyan-800/50 px-1.5 py-0.2 rounded font-semibold">Project Admin</span>
+</div>
+<p class="text-[11px] text-slate-400 mt-1 leading-snug">
+                      Full access to retrain triggers, model threshold overrides, and user management.
+                    </p>
+</div>
+</label>
+<!-- Option 2: Analyst Role (SELECTED) -->
+<label class="p-3 border-2 border-cyan-500/70 bg-[#0B111E] rounded flex items-start gap-3 cursor-pointer shadow-inner">
+<input checked="" class="mt-0.5 text-cyan-400 bg-[#0B111E] border-cyan-400 focus:ring-0 cursor-pointer" name="project_role" type="radio">
+<div class="flex flex-col flex-1">
+<div class="flex items-center justify-between">
+<span class="text-xs font-bold text-white">Analyst</span>
+<span class="text-[10px] font-mono text-blue-300 bg-blue-950/80 border border-blue-800/50 px-1.5 py-0.2 rounded font-semibold">Active Selection</span>
+</div>
+<p class="text-[11px] text-slate-400 mt-1 leading-snug">
+                      Investigate flagged transactions, review SHAP explainability, and submit dispositions.
+                    </p>
+</div>
+</label>
+</div>
+</div>
+<!-- Section 2: Functional Permissions Checkboxes -->
+<div class="pt-3 border-t border-[#1E293B]">
+<label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+                Functional Permissions
+              </label>
+<div class="space-y-2"><label class="flex items-center justify-between p-2.5 rounded bg-[#0F172A] border border-[#1E293B] cursor-pointer hover:border-slate-700"><div class="flex flex-col font-sans"><span class="text-xs font-semibold text-white">Review Cases &amp; Submit Verdicts</span><span class="text-[11px] text-slate-400">Inspect transactions, SHAP feature waterfalls, and submit dispositions</span></div><input checked="" class="text-cyan-400 bg-[#0B111E] border-[#1E293B] rounded focus:ring-0 cursor-pointer" type="checkbox"></label><label class="flex items-center justify-between p-2.5 rounded bg-[#0F172A]/50 border border-[#1E293B] opacity-75 cursor-not-allowed"><div class="flex flex-col font-sans"><div class="flex items-center gap-1.5"><span class="text-xs font-medium text-slate-300">Trigger Model Retraining</span><span class="text-[9px] font-sans font-semibold text-slate-400 bg-[#1E293B] px-1.5 py-0.5 rounded">Admin only</span></div><span class="text-[11px] text-slate-400">Execute pipeline on new ground-truth labels</span></div><input class="text-cyan-400 bg-[#0B111E] border-[#1E293B] rounded focus:ring-0 cursor-not-allowed" disabled="" type="checkbox"></label><label class="flex items-center justify-between p-2.5 rounded bg-[#0F172A]/50 border border-[#1E293B] opacity-75 cursor-not-allowed"><div class="flex flex-col font-sans"><div class="flex items-center gap-1.5"><span class="text-xs font-medium text-slate-300">Adjust Risk Decision Threshold</span><span class="text-[9px] font-sans font-semibold text-slate-400 bg-[#1E293B] px-1.5 py-0.5 rounded">Admin only</span></div><span class="text-[11px] text-slate-400">Modify cutoff boundary between 0.50 and 0.90</span></div><input class="text-cyan-400 bg-[#0B111E] border-[#1E293B] rounded focus:ring-0 cursor-not-allowed" disabled="" type="checkbox"></label><label class="flex items-center justify-between p-2.5 rounded bg-[#0F172A]/50 border border-[#1E293B] opacity-75 cursor-not-allowed"><div class="flex flex-col font-sans"><div class="flex items-center gap-1.5"><span class="text-xs font-medium text-slate-300">Manage User Accounts</span><span class="text-[9px] font-sans font-semibold text-slate-400 bg-[#1E293B] px-1.5 py-0.5 rounded">Admin only</span></div><span class="text-[11px] text-slate-400">Create users, assign analyst scopes, and modify access</span></div><input class="text-cyan-400 bg-[#0B111E] border-[#1E293B] rounded focus:ring-0 cursor-not-allowed" disabled="" type="checkbox"></label><div class="pt-2 flex items-center justify-between border-t border-[#1E293B]/70"><div class="flex flex-col"><span class="text-xs font-semibold text-white">Session Timeout</span><span class="text-[11px] text-slate-400">Automatic logout after inactivity</span></div><select class="h-7 px-2 text-[11px] font-medium bg-[#0B111E] border border-[#1E293B] text-slate-200 rounded focus:ring-0 focus:border-cyan-400"><option>30 minutes</option><option>60 minutes</option><option>120 minutes</option></select></div></div>
+</div>
+</div>
+<!-- Drawer Footer Action Buttons -->
+<div class="p-3.5 bg-[#0F172A] border-t border-[#1E293B] flex items-center justify-between mt-auto">
+<span class="text-[11px] text-slate-400 font-mono">Changes apply on next login</span>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded bg-[#131D31] border border-[#1E293B] text-slate-300 text-xs font-medium hover:text-white hover:bg-[#1E293B] transition-colors">
+                Cancel
+              </button>
+<button class="px-3.5 py-1.5 rounded bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[15px]">check</span>
+<span class="">Save Permissions</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</body></html>

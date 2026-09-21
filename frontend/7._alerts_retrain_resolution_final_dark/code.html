@@ -1,0 +1,481 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SentinelML - Active Alerts &amp; Incident Resolution</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "background": "#0B111E",
+            "surface-dim": "#080E1B",
+            "surface-container": "#131D31",
+            "surface-card": "#101828",
+            "surface-subtle": "#0F172A",
+            "surface-border": "#1E293B",
+            "surface-border-active": "#2A3B54",
+            "primary": "#06B6D4",
+            "primary-bright": "#4CD7F6",
+            "teal-accent": "#06B6D4",
+            "teal-muted": "rgba(6, 182, 212, 0.15)",
+            "on-surface": "#DDE2F5",
+            "on-surface-muted": "#94A3B8",
+            "error-dark": "rgba(239, 68, 68, 0.15)",
+            "warning-dark": "rgba(245, 158, 11, 0.15)",
+            "success-dark": "rgba(16, 185, 129, 0.15)"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-size: 16px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Custom scrollbar for dense cockpit styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B111E;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1E293B;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #2A3B54;
+    }
+  </style>
+</head>
+<body class="bg-[#050810] text-[#DDE2F5] font-sans antialiased flex items-center justify-center min-h-screen p-0 m-0">
+<!-- Unified 1440x900 Cockpit Container -->
+<div class="w-[1440px] max-w-[1440px] h-[900px] overflow-hidden flex bg-[#0B111E] shadow-2xl relative border border-[#1E293B]">
+<!-- Shell Left Sidebar (w-64, flex-shrink-0) -->
+<aside class="w-64 h-[900px] flex-shrink-0 bg-[#0B111E] border-r border-[#1E293B] flex flex-col justify-between z-30">
+<div class="flex flex-col">
+<!-- Logo & Header -->
+<div class="h-14 px-5 border-b border-[#1E293B] flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="p-1.5 bg-[#06B6D4]/10 border border-[#06B6D4]/30 rounded text-[#06B6D4]">
+<span class="material-symbols-outlined" style="font-size: 18px;">security</span>
+</span>
+<span class="font-bold text-white tracking-wider text-sm uppercase">Fraud Detection &amp; Drift Monitoring</span>
+</div>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+</span>
+</div>
+<!-- Cluster Status Micro Banner -->
+<div class="px-4 py-2.5 mx-3 mt-3 bg-[#131D31]/70 border border-[#1E293B] rounded flex items-center justify-between"><div><div class="text-[10px] uppercase font-mono tracking-wider text-slate-400">System Architecture</div><div class="text-xs font-semibold text-white">FastAPI Backend | MySQL</div></div><span class="text-[10px] font-mono text-[#06B6D4] bg-[#06B6D4]/10 px-1.5 py-0.5 rounded border border-[#06B6D4]/30 font-medium">Localhost:8000</span></div>
+<!-- Navigation Menu -->
+<nav class="mt-4 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded text-xs font-medium text-slate-400 hover:text-white hover:bg-[#131D31] transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400">dashboard</span>
+<span class="">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-xs font-medium text-slate-400 hover:text-white hover:bg-[#131D31] transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400">receipt_long</span>
+<span class="">Transactions</span>
+</a>
+<!-- ACTIVE TAB: Alerts with Badge '3' -->
+<a class="flex items-center justify-between px-3 py-2 rounded bg-[#131D31] text-[#06B6D4] font-semibold text-xs border border-[#06B6D4]/30 shadow-sm" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#06B6D4]">warning</span>
+<span class="text-white">Alerts</span>
+</div>
+<span class="bg-red-500/20 border border-red-500/40 text-red-400 text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full">3</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-xs font-medium text-slate-400 hover:text-white hover:bg-[#131D31] transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400">fact_check</span>
+<span class="">Cases</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-xs font-medium text-slate-400 hover:text-white hover:bg-[#131D31] transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400">health_and_safety</span>
+<span class="">Model Health</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-xs font-medium text-slate-400 hover:text-white hover:bg-[#131D31] transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400">ssid_chart</span>
+<span class="">Drift Monitoring</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-xs font-medium text-slate-400 hover:text-white hover:bg-[#131D31] transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400">manage_accounts</span>
+<span class="">User Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded text-xs font-medium text-slate-400 hover:text-white hover:bg-[#131D31] transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400">tune</span>
+<span class="">Settings</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Controls & User Profile Badge -->
+<div class="p-3 border-t border-[#1E293B] space-y-2">
+<div class="w-full py-1.5 px-3 bg-[#131D31] border border-[#1E293B] text-slate-300 rounded text-xs font-medium flex items-center justify-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span class="">scikit-learn Runtime Ready</span></div>
+<!-- User Profile Badge -->
+<div class="flex items-center justify-between p-2 rounded bg-[#080E1B] border border-[#1E293B]">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded bg-gradient-to-tr from-[#06B6D4] to-blue-600 flex items-center justify-center text-slate-950 font-bold text-xs">
+              JD
+            </div>
+<div>
+<div class="text-xs font-medium text-white leading-tight">Jane Doe</div>
+<div class="text-[10px] text-slate-400 font-mono">Senior Fraud Analyst</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-sm">more_vert</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area (Right Column) -->
+<div class="flex-1 flex flex-col h-[900px] overflow-hidden bg-[#0B111E]">
+<!-- Topbar (56px) -->
+<header class="h-14 flex-shrink-0 bg-[#0F172A] border-b border-[#1E293B] px-6 flex items-center justify-between z-20">
+<!-- Breadcrumb & Status -->
+<div class="flex items-center gap-3"><div class="flex items-center gap-2 text-xs text-slate-400"><span class="font-medium">Capstone Project</span><span class="text-slate-600">/</span><span class="text-slate-200 font-semibold">Alerts &amp; Retraining</span></div><div class="h-4 w-[1px] bg-[#1E293B] mx-2"></div><div class="flex items-center gap-2 text-[11px] text-slate-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span class="text-[#06B6D4] font-medium">FastAPI Backend | MySQL</span><span class="text-slate-600">|</span><span class="font-mono text-[11px]">Port 8000</span></div></div>
+<!-- Top Actions -->
+<div class="flex items-center gap-3">
+<button class="h-8 px-3 bg-[#131D31] border border-[#1E293B] text-slate-300 hover:text-white text-xs font-medium rounded hover:bg-[#1A263E] transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-slate-400">done_all</span>
+<span class="">Acknowledge All</span>
+</button>
+<button class="h-8 px-3.5 bg-[#06B6D4] hover:bg-[#06B6D4]/90 text-slate-950 font-semibold text-xs rounded transition-colors flex items-center gap-1.5 shadow-sm" id="openModalBtnTop">
+<span class="material-symbols-outlined font-bold">bolt</span>
+<span class="">Trigger Retrain Pipeline</span>
+</button>
+<div class="h-4 w-[1px] bg-[#1E293B] mx-1"></div>
+<button class="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-white hover:bg-[#131D31] rounded transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Body: h-[calc(900px-56px)] overflow-y-auto p-6 -->
+<main class="h-[calc(900px-56px)] overflow-y-auto p-6 space-y-5 relative">
+<!-- Alert Metric Summary Header -->
+<section class="bg-[#131D31] border border-[#1E293B] rounded-lg p-4 space-y-4">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-[#06B6D4]" style="font-size: 20px;">crisis_alert</span>
+<h1 class="text-base font-semibold text-white tracking-tight">Active Incidents &amp; Autonomous Mitigation Feed</h1>
+</div>
+<p class="text-xs text-slate-400">Real-time model drift anomalies, precision alerts, and operational intervention controls.</p>
+</div>
+<!-- Summary Pills -->
+<div class="flex items-center gap-2.5 flex-wrap">
+<div class="flex items-center gap-2 px-3 py-1.5 bg-red-950/50 text-red-300 border border-red-500/30 rounded-md">
+<span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+<span class="text-xs font-semibold uppercase tracking-wider font-mono">3 Critical Alerts</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 bg-amber-950/40 text-amber-300 border border-amber-500/30 rounded-md">
+<span class="w-2 h-2 rounded-full bg-amber-400"></span>
+<span class="text-xs font-semibold uppercase tracking-wider font-mono">5 Warnings</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 bg-emerald-950/40 text-emerald-300 border border-emerald-500/30 rounded-md">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-xs font-semibold uppercase tracking-wider font-mono">18 Resolved</span>
+</div>
+</div>
+</div>
+<!-- Filter Tabs & Category Bar -->
+<div class="flex items-center justify-between pt-3 border-t border-[#1E293B]">
+<!-- Severity Filter Tabs -->
+<div class="flex items-center bg-[#0B111E] p-0.5 rounded border border-[#1E293B]">
+<button class="px-3 py-1 bg-[#131D31] text-white font-medium text-xs rounded border border-[#1E293B] shadow-sm">
+                All Alerts (26)
+              </button>
+<button class="px-3 py-1 text-red-400 hover:text-red-300 text-xs font-medium transition-colors flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+                Critical (3)
+              </button>
+<button class="px-3 py-1 text-amber-400 hover:text-amber-300 text-xs font-medium transition-colors flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                Warning (5)
+              </button>
+<button class="px-3 py-1 text-slate-400 hover:text-white text-xs font-medium transition-colors">
+                Info (18)
+              </button>
+</div>
+<!-- Resolution Status Segment -->
+<div class="flex items-center gap-2 text-xs">
+<span class="text-slate-400 font-mono text-[11px]">STATUS:</span>
+<div class="flex items-center bg-[#0B111E] p-0.5 rounded border border-[#1E293B]">
+<button class="px-2.5 py-0.5 bg-[#131D31] text-[#06B6D4] font-medium rounded border border-[#1E293B]">Open</button>
+<button class="px-2.5 py-0.5 text-slate-400 hover:text-white transition-colors">Investigating</button>
+<button class="px-2.5 py-0.5 text-slate-400 hover:text-white transition-colors">Archived</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Active Incident Feed -->
+<section class="space-y-3.5">
+<!-- Alert Item 1: CRITICAL Feature Drift Violation -->
+<article class="bg-[#131D31] border-l-4 border-l-red-500 border border-[#1E293B] rounded-lg p-4 space-y-3 shadow-sm hover:border-[#2A3B54] transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-3">
+<span class="p-1.5 bg-red-950/60 text-red-400 border border-red-800/60 rounded">
+<span class="material-symbols-outlined">ssid_chart</span>
+</span>
+<div>
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.5 bg-red-950/80 text-red-300 border border-red-500/40 text-[10px] font-mono uppercase font-bold rounded">
+                      Critical Drift
+                    </span>
+<span class="text-xs font-mono text-slate-400">ALERT-PSI-88902</span>
+<span class="text-slate-600">•</span>
+<span class="text-xs text-slate-400">Model Governance</span>
+</div>
+<h2 class="text-sm font-semibold text-white mt-1">
+                    Critical Feature Drift Violation: <code class="font-mono text-xs text-[#06B6D4] bg-[#0B111E] px-1.5 py-0.5 rounded border border-[#1E293B]">cross_border_velocity</code> (PSI 0.282)
+                  </h2>
+</div>
+</div>
+<div class="text-xs font-mono text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span>
+<span class="">14 mins ago</span>
+</div>
+</div>
+<!-- Content Details & Metric Panel -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 p-3 bg-[#0B111E] border border-[#1E293B] rounded">
+<div class="md:col-span-2 space-y-1.5">
+<div class="text-[11px] font-mono uppercase text-slate-400 font-semibold">Diagnostic &amp; Impact</div>
+<p class="text-xs text-slate-300">
+                  Feature distribution displays marked covariate shift following international holiday routing adjustments. High risk of prediction degradation across global payment conduits.
+                </p>
+<div class="flex items-center gap-1.5 text-xs text-red-400 font-medium pt-1">
+<span class="material-symbols-outlined text-sm">error</span>
+<span class="">Impact: 142 false positives in last 6 hours across high-velocity rails.</span>
+</div>
+</div>
+<!-- Metric Matrix -->
+<div class="border-t md:border-t-0 md:border-l border-[#1E293B] pt-2 md:pt-0 md:pl-3 flex flex-col justify-center gap-1 text-xs font-mono">
+<div class="flex justify-between items-center text-slate-400 text-[11px]">
+<span class="">Baseline PSI:</span>
+<span class="font-semibold text-white">0.100</span>
+</div>
+<div class="flex justify-between items-center text-slate-400 text-[11px]">
+<span class="">Warning Boundary:</span>
+<span class="font-semibold text-amber-400">0.250</span>
+</div>
+<div class="flex justify-between items-center text-slate-300 text-[11px]">
+<span class="">Calculated Drift:</span>
+<span class="font-bold text-red-400">0.282 (+182%)</span>
+</div>
+<div class="w-full bg-[#1E293B] h-1.5 rounded-full overflow-hidden mt-1">
+<div class="bg-red-500 h-full shadow-[0_0_8px_rgba(239,68,68,0.6)]" style="width: 88%"></div>
+</div>
+</div>
+</div>
+<!-- Action Row -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-2">
+<button class="inlineModalOpener h-7 px-3 bg-[#06B6D4] hover:bg-[#06B6D4]/90 text-slate-950 font-semibold text-xs rounded transition-colors flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-xs">restart_alt</span>
+<span class="">Initiate Model Retrain</span>
+</button>
+<button class="h-7 px-3 bg-[#0B111E] border border-[#1E293B] text-slate-300 hover:text-white text-xs font-medium rounded hover:bg-[#1A263E] transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">tune</span>
+<span class="">Adjust Feature Weight</span>
+</button>
+</div>
+<button class="h-7 px-3 bg-[#0B111E] border border-[#1E293B] text-slate-400 hover:text-white text-xs font-medium rounded hover:bg-[#1A263E] transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">volume_off</span>
+<span class="">Silence Alert</span>
+</button>
+</div>
+</article>
+<!-- Alert Item 2: CRITICAL Fraud Velocity Surge -->
+<article class="bg-[#131D31] border-l-4 border-l-red-500 border border-[#1E293B] rounded-lg p-4 space-y-3 shadow-sm hover:border-[#2A3B54] transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-3">
+<span class="p-1.5 bg-red-950/60 text-red-400 border border-red-800/60 rounded">
+<span class="material-symbols-outlined">bolt</span>
+</span>
+<div>
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.5 bg-red-950/80 text-red-300 border border-red-500/40 text-[10px] font-mono uppercase font-bold rounded">
+                      Rule Hit Surge
+                    </span>
+<span class="text-xs font-mono text-slate-400">RULE-WIRE-882</span>
+<span class="text-slate-600">•</span>
+<span class="text-xs text-slate-400">Real-time Fraud Containment</span>
+</div>
+<h2 class="text-sm font-semibold text-white mt-1">
+                    Fraud Velocity Surge: Cross-Border Wire Transfers (Rule #882)
+                  </h2>
+</div>
+</div>
+<div class="text-xs font-mono text-slate-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">schedule</span>
+<span class="">32 mins ago</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 p-3 bg-[#0B111E] border border-[#1E293B] rounded">
+<div class="md:col-span-2 space-y-1.5">
+<div class="text-[11px] font-mono uppercase text-slate-400 font-semibold">Incident Context</div>
+<p class="text-xs text-slate-300">
+                  Ingestion anomaly detected: 42 transactions flagged in 5 minutes with coordinated proxy IP hops and unverified beneficiary accounts.
+                </p>
+<div class="flex items-center gap-1.5 text-xs text-red-400 font-medium pt-1">
+<span class="material-symbols-outlined text-sm">attach_money</span>
+<span class="">Impact: $340,000 potential exposure blocked on gateway SWIFT-CORR-09.</span>
+</div>
+</div>
+<!-- Surge Micro Matrix -->
+<div class="border-t md:border-t-0 md:border-l border-[#1E293B] pt-2 md:pt-0 md:pl-3 flex flex-col justify-center gap-1 text-xs font-mono">
+<div class="flex justify-between items-center text-slate-400 text-[11px]">
+<span class="">Burst Velocity:</span>
+<span class="font-bold text-red-400">8.4 tx/min (Norm: 0.2)</span>
+</div>
+<div class="flex justify-between items-center text-slate-400 text-[11px]">
+<span class="">Avg Risk Score:</span>
+<span class="font-semibold text-white">94.8 / 100</span>
+</div>
+<div class="flex justify-between items-center text-slate-400 text-[11px]">
+<span class="">Gateway Route:</span>
+<span class="font-semibold text-[#06B6D4]">SWIFT-CORR-09</span>
+</div>
+</div>
+</div>
+<!-- Action Row -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-2">
+<button class="h-7 px-3 bg-red-600 hover:bg-red-500 text-white font-medium text-xs rounded transition-colors flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-xs">gavel</span>
+<span class="">Activate Circuit Breaker</span>
+</button>
+<button class="h-7 px-3 bg-[#0B111E] border border-[#1E293B] text-slate-300 hover:text-white text-xs font-medium rounded hover:bg-[#1A263E] transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">visibility</span>
+<span class="">View In Transactions</span>
+</button>
+</div>
+<button class="h-7 px-3 bg-[#0B111E] border border-[#1E293B] text-slate-400 hover:text-white text-xs font-medium rounded hover:bg-[#1A263E] transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">check</span>
+<span class="">Acknowledge</span>
+</button>
+</div>
+</article>
+<!-- Alert Item 3: WARNING Model Recall Soft Dip -->
+<article class="bg-[#131D31] border-l-4 border-l-amber-500 border border-[#1E293B] rounded-lg p-4 space-y-3 shadow-sm hover:border-[#2A3B54] transition-all"><div class="flex items-start justify-between"><div class="flex items-start gap-3"><span class="p-1.5 bg-amber-950/60 text-amber-400 border border-amber-800/60 rounded"><span class="material-symbols-outlined">trending_down</span></span><div><div class="flex items-center gap-2"><span class="px-1.5 py-0.5 bg-amber-950/80 text-amber-300 border border-amber-500/40 text-[10px] font-semibold rounded">Performance Notice</span><span class="text-xs font-mono text-slate-400">EVAL-NOTIFY-003</span><span class="text-slate-600">•</span><span class="text-xs text-slate-400">Validation Partition</span></div><h2 class="text-sm font-semibold text-white mt-1">Recall dropped slightly to 87.2% (Target: 88.0%)</h2></div></div><div class="text-xs font-mono text-slate-400 flex items-center gap-1"><span class="material-symbols-outlined text-xs">schedule</span><span class="">2 hours ago</span></div></div><div class="p-3 bg-[#0B111E] border border-[#1E293B] rounded flex flex-col md:flex-row md:items-center justify-between gap-3"><div class="space-y-1"><p class="text-xs text-slate-300">Validation recall dropped by 0.8% across high-amount test transactions after latest batch ingestion.</p><div class="text-[11px] font-mono text-amber-400">Retraining with SMOTE recommended to restore recall above 88.0%.</div></div><div class="flex items-center gap-2 flex-shrink-0"><button class="inlineModalOpener h-7 px-3 bg-[#06B6D4] hover:bg-[#06B6D4]/90 text-slate-950 font-semibold text-xs rounded transition-colors flex items-center gap-1 shadow-sm"><span class="material-symbols-outlined text-xs">restart_alt</span><span class="">Retrain Model</span></button></div></div></article>
+<!-- Resolved Informational Item -->
+<article class="bg-[#131D31]/80 border-l-4 border-l-emerald-500 border border-[#1E293B] rounded-lg p-3.5 flex items-center justify-between"><div class="flex items-center gap-3"><span class="p-1 bg-[#0B111E] text-emerald-400 border border-[#1E293B] rounded"><span class="material-symbols-outlined text-sm">cloud_sync</span></span><div><div class="flex items-center gap-2 text-[10px] text-slate-400"><span class="font-semibold">Ingestion Check</span><span class="">•</span><span class="font-mono">MYSQL-BATCH-021</span></div><div class="text-xs font-medium text-white">Daily MySQL batch processed (18,400 verified transactions ingested)</div></div></div><div class="flex items-center gap-3"><span class="px-2 py-0.5 bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 rounded text-[11px] font-medium">● Ingestion OK</span><span class="text-xs font-mono text-slate-500">2h ago</span></div></article>
+</section>
+<!-- Auxiliary System Log Matrix -->
+<section class="grid grid-cols-3 gap-3 pt-2">
+<div class="bg-[#131D31] border border-[#1E293B] p-3 rounded">
+<div class="flex justify-between text-[11px] font-mono text-slate-400 uppercase">
+<span class="">Ingestion Queue</span>
+<span class="text-[#06B6D4]">Healthy</span>
+</div>
+<div class="text-sm font-bold font-mono text-white mt-1">1.2ms Avg Delay</div>
+<p class="text-[11px] text-slate-500 mt-0.5">Kafka partition 0-15 balanced</p>
+</div>
+<div class="bg-[#131D31] border border-[#1E293B] p-3 rounded">
+<div class="flex justify-between text-[11px] font-mono text-slate-400 uppercase">
+<span class="">Circuit Breakers</span>
+<span class="text-emerald-400">Armed &amp; Ready</span>
+</div>
+<div class="text-sm font-bold font-mono text-white mt-1">0 Inactive Nodes</div>
+<p class="text-[11px] text-slate-500 mt-0.5">All 14 gateway proxies operational</p>
+</div>
+<div class="bg-[#131D31] border border-[#1E293B] p-3 rounded">
+<div class="flex justify-between text-[11px] font-mono text-slate-400 uppercase">
+<span class="">Retrain Quota</span>
+<span class="text-white">3 / 5 Available</span>
+</div>
+<div class="text-sm font-bold font-mono text-white mt-1">GPU-Cluster-East-04</div>
+<p class="text-[11px] text-slate-500 mt-0.5">24h cooldown reset ready</p>
+</div>
+</section>
+</main>
+</div>
+<!-- Prominent, Implementation-Ready Dialog Overlay (Centered Modal) -->
+<!-- Displayed centered over the unified 1440x900 viewport with backdrop blur -->
+<div class="absolute inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-[3px] transition-all" id="retrainModal">
+<div class="bg-[#0F172A] border border-[#2A3B54] w-[540px] rounded-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+<!-- Modal Header -->
+<div class="px-5 py-4 border-b border-[#1E293B] flex items-center justify-between bg-[#131D31]">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-[#0B111E] text-[#06B6D4] border border-[#06B6D4]/30 rounded">
+<span class="material-symbols-outlined" style="font-size: 20px;">restart_alt</span>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-white">Confirm Model Retraining</h3>
+<p class="text-[11px] text-slate-400">Automated retraining sequence initiated via operational incident mitigation.</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-white p-1 rounded hover:bg-[#1E293B] transition-colors" id="closeModalBtn">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Modal Body & Specification Table -->
+<div class="p-5 space-y-4"><div class="bg-[#131D31] border border-[#1E293B] rounded divide-y divide-[#1E293B] text-xs"><div class="px-3.5 py-2.5 flex justify-between items-center"><span class="text-slate-400 font-medium">Target Model:</span><span class="font-mono text-white font-semibold flex items-center gap-1.5"><span class="text-slate-400">RandomForestClassifier</span><span class="text-[#06B6D4]">(v1.0 → v1.1)</span></span></div><div class="px-3.5 py-2.5 flex justify-between items-center"><span class="text-slate-400 font-medium">Training Dataset:</span><span class="text-slate-200 text-xs">Baseline (18,400 samples) + newly verified fraud/legitimate labels (MySQL)</span></div><div class="px-3.5 py-2.5 flex justify-between items-center"><span class="text-slate-400 font-medium">Balancing:</span><span class="text-slate-200 text-xs font-mono text-[#06B6D4]">SMOTE (Synthetic Minority Over-sampling)</span></div><div class="px-3.5 py-2.5 flex justify-between items-center"><span class="text-slate-400 font-medium">Compute:</span><span class="text-slate-200 text-xs">Local Python Worker (scikit-learn, <code class="font-mono text-[11px] text-[#06B6D4] bg-[#0B111E] px-1 py-0.5 rounded border border-[#1E293B]">n_jobs=-1</code>)</span></div><div class="px-3.5 py-2.5 flex justify-between items-center"><span class="text-slate-400 font-medium">Estimated Duration:</span><span class="font-mono text-white font-semibold">~45 seconds</span></div><div class="px-3.5 py-2.5 flex justify-between items-center bg-[#0B111E]/40"><span class="text-slate-400 font-medium">Validation Target:</span><span class="text-emerald-400 font-semibold font-mono">Test Recall &gt;= 88.0%, Precision &gt;= 90.0%</span></div></div><div class="p-3 bg-cyan-950/30 border border-[#06B6D4]/30 rounded flex items-start gap-2.5 text-xs text-slate-300"><span class="material-symbols-outlined text-[#06B6D4] text-sm mt-0.5">info</span><div class="leading-relaxed text-[11px]">Pipeline will balance classes with SMOTE, fit scikit-learn <strong class="text-[#06B6D4] font-mono">RandomForestClassifier</strong>, validate against holdout samples from MySQL, and export the trained model artifact.</div></div></div>
+<!-- Modal Footer Actions -->
+<div class="px-5 py-3.5 bg-[#131D31] border-t border-[#1E293B] flex items-center justify-end gap-2.5">
+<button class="h-8 px-4 bg-[#0B111E] border border-[#1E293B] text-slate-300 hover:text-white text-xs font-medium rounded hover:bg-[#1A263E] transition-colors" id="cancelModalBtn">
+            Cancel
+          </button>
+<button class="h-8 px-4 bg-[#06B6D4] hover:bg-[#06B6D4]/90 text-slate-950 font-semibold text-xs rounded transition-colors flex items-center gap-1.5 shadow-sm" id="executeRetrainBtn"><span class="material-symbols-outlined text-slate-950 font-bold" style="font-size: 15px;">play_arrow</span><span class="">Run Retrain Pipeline</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Interaction Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('retrainModal');
+      const openBtnTop = document.getElementById('openModalBtnTop');
+      const inlineOpeners = document.querySelectorAll('.inlineModalOpener');
+      const closeBtn = document.getElementById('closeModalBtn');
+      const cancelBtn = document.getElementById('cancelModalBtn');
+      const executeBtn = document.getElementById('executeRetrainBtn');
+
+      const showModal = () => {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      };
+
+      const hideModal = () => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      };
+
+      openBtnTop?.addEventListener('click', showModal);
+      inlineOpeners.forEach(btn => btn.addEventListener('click', showModal));
+      closeBtn?.addEventListener('click', hideModal);
+      cancelBtn?.addEventListener('click', hideModal);
+
+      // Close modal on click outside box
+      modal?.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          hideModal();
+        }
+      });
+
+      executeBtn?.addEventListener('click', () => {
+        executeBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-xs">sync</span> <span>Dispatching Pipeline...</span>';
+        setTimeout(() => {
+          hideModal();
+          executeBtn.innerHTML = '<span class="material-symbols-outlined text-slate-950 font-bold" style="font-size: 15px;">play_arrow</span> <span>Execute Retrain Pipeline</span>';
+        }, 800);
+      });
+    });
+  </script>
+
+
+</body></html>

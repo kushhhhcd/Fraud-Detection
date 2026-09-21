@@ -1,0 +1,310 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>SentinelML - Transactions Explorer &amp; Risk Management Table</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-background": "#dde2f5",
+            "tertiary": "#7bd0ff",
+            "surface-tint": "#4cd7f6",
+            "on-tertiary-container": "#00415a",
+            "on-tertiary": "#00354a",
+            "outline": "#869397",
+            "inverse-on-surface": "#2a303f",
+            "outline-variant": "#1e293b",
+            "on-error": "#ffffff",
+            "secondary": "#06b6d4",
+            "secondary-fixed": "#71f8e4",
+            "error-container": "#450a0a",
+            "on-surface": "#f1f5f9",
+            "surface-bright": "#1e293b",
+            "surface-container": "#131d31",
+            "surface-dim": "#0b111e",
+            "surface-container-lowest": "#0b111e",
+            "surface-container-low": "#0f172a",
+            "surface": "#131d31",
+            "primary": "#06b6d4",
+            "on-surface-variant": "#94a3b8",
+            "surface-container-high": "#1a263d",
+            "error": "#ef4444",
+            "background": "#0b111e"
+          },
+          "fontFamily": {
+            "sans": ["Inter", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b111e;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+  </style>
+</head>
+<body class="bg-[#0b111e] text-[#f1f5f9] antialiased flex items-center justify-center min-h-screen selection:bg-cyan-500/20 selection:text-cyan-300 font-sans">
+<!-- MAIN 1440x900 DESKTOP CANVAS -->
+<div class="w-[1440px] max-w-[1440px] h-[900px] bg-[#0b111e] overflow-hidden flex border border-[#1e293b] shadow-2xl relative">
+<!-- ======================================================== -->
+<!-- SIDEBAR (w-64 = 256px, fixed height)                     -->
+<!-- ======================================================== -->
+<aside class="w-64 h-full flex flex-col justify-between p-3 bg-[#0f172a] border-r border-[#1e293b] shrink-0 select-none z-30">
+<div class="flex flex-col gap-2">
+<!-- Brand Logo Box -->
+<div class="flex items-center gap-2.5 px-1 py-1.5 border-b border-[#1e293b] pb-3">
+<div class="w-8 h-8 rounded bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+<span class="material-symbols-outlined fill text-cyan-400" style="font-size: 20px;">shield</span>
+</div>
+<div class="flex flex-col overflow-hidden"><span class="text-[14px] font-bold text-white tracking-tight leading-tight">Fraud Detection &amp; Drift</span><span class="text-[11px] text-slate-400 truncate leading-tight">Course Project • ML System</span></div>
+</div>
+<!-- Navigation Links -->
+<nav aria-label="Primary Navigation" class="flex flex-col gap-1 mt-2">
+<!-- Overview -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded text-[13px] text-slate-400 hover:bg-[#131d31] hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-400">dashboard</span>
+<span class="">Overview</span>
+</a>
+<!-- Transactions (ACTIVE) -->
+<a class="flex items-center justify-between px-3 py-1.5 rounded bg-[#131d31] text-cyan-400 border-r-2 border-cyan-400 font-semibold shadow-sm" href="#">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined fill text-cyan-400">receipt_long</span>
+<span class="text-white text-[13px]">Transactions</span>
+</div>
+<span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-700/60 font-medium">Live</span>
+</a>
+<!-- Alerts -->
+<a class="flex items-center justify-between px-3 py-1.5 rounded text-[13px] text-slate-400 hover:bg-[#131d31] hover:text-slate-200 transition-colors" href="#">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined">warning</span>
+<span class="">Alerts</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500/50"></span>
+</a>
+<!-- Cases -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded text-[13px] text-slate-400 hover:bg-[#131d31] hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="">Cases</span>
+</a>
+<!-- Model Health -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded text-[13px] text-slate-400 hover:bg-[#131d31] hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined">health_and_safety</span>
+<span class="">Model Health</span>
+</a>
+<!-- Drift Monitoring -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded text-[13px] text-slate-400 hover:bg-[#131d31] hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined">ssid_chart</span>
+<span class="">Drift Monitoring</span>
+</a>
+<!-- User Management -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded text-[13px] text-slate-400 hover:bg-[#131d31] hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined">manage_accounts</span>
+<span class="">User Management</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-2.5 px-3 py-1.5 rounded text-[13px] text-slate-400 hover:bg-[#131d31] hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined">tune</span>
+<span class="">Settings</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Section -->
+<div class="flex flex-col gap-2.5 border-t border-[#1e293b] pt-3">
+<div class="w-full flex items-center justify-between py-1.5 px-2.5 rounded bg-[#131d31] border border-[#223049] text-[11px]"><span class="flex items-center gap-1.5 text-emerald-400 font-medium"><span class="w-2 h-2 rounded-full bg-emerald-400"></span>Status: Active</span><span class="font-mono text-slate-400 text-[10px]">localhost:8000</span></div>
+<nav class="flex flex-col gap-0.5">
+<a class="flex items-center gap-2.5 px-3 py-1 rounded text-[12px] text-slate-400 hover:bg-[#131d31] hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-size: 16px;">menu_book</span>
+<span class="">Documentation</span>
+</a>
+<a class="flex items-center gap-2.5 px-3 py-1 rounded text-[12px] text-slate-400 hover:bg-[#131d31] hover:text-slate-200 transition-colors" href="#">
+<span class="material-symbols-outlined" style="font-size: 16px;">verified_user</span>
+<span class="">System Audit</span>
+</a>
+</nav>
+<div class="flex items-center justify-between px-2 py-1 text-[11px] font-mono text-slate-400 border-t border-[#1e293b]/70 pt-2">
+<span class="">INFERENCE P99</span>
+<span class="text-cyan-400 font-semibold">18.4ms</span>
+</div>
+</div>
+</aside>
+<!-- ======================================================== -->
+<!-- MAIN WORKSPACE                                           -->
+<!-- ======================================================== -->
+<div class="flex-1 flex flex-col h-full overflow-hidden bg-[#0b111e] relative min-w-0">
+<!-- TOPBAR (56px) -->
+<header class="h-14 px-4 w-full bg-[#0f172a] border-b border-[#1e293b] flex items-center justify-between shrink-0 z-20">
+<div class="flex items-center gap-3 flex-1 max-w-xl"><div class="flex items-center gap-1 text-[13px] text-white tracking-tight font-bold"><span class="">Fraud Detection &amp; Drift Monitoring</span></div><div class="relative w-64"><span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" style="font-size: 16px;">search</span><input class="w-full h-8 pl-8 pr-2.5 bg-[#131d31] border border-[#223049] rounded text-[12px] text-slate-200 placeholder:text-slate-500 focus:border-cyan-400 focus:ring-0 focus:outline-none" placeholder="Search transactions..." type="text"></div><div class="flex items-center gap-2"><span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-cyan-950/50 text-cyan-300 text-[11px] font-mono border border-cyan-800/40"><span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>Model: Random Forest v1.0</span><span class="text-[11px] font-mono text-slate-400 bg-[#131d31] px-2 py-0.5 rounded border border-[#223049]">Storage: MySQL</span></div></div>
+<!-- Right Header Actions -->
+<div class="flex items-center gap-2.5">
+<button class="h-8 px-2.5 rounded bg-[#131d31] border border-[#223049] text-slate-200 text-[12px] font-medium hover:bg-[#1a263d] transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-slate-400" style="font-size: 16px;">file_download</span>
+          Export Report
+        </button>
+<button class="h-8 px-3 rounded bg-cyan-500 text-[#041e26] font-semibold text-[12px] hover:bg-cyan-400 transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined" style="font-size: 16px;">bolt</span>
+          Trigger Retrain
+        </button>
+<div class="h-4 w-px bg-[#1e293b] mx-0.5"></div>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-[#131d31] text-slate-400 hover:text-slate-200 transition-colors" title="Sync Feeds" type="button">
+<span class="material-symbols-outlined" style="font-size: 18px;">sync</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-[#131d31] text-slate-400 hover:text-slate-200 relative transition-colors" title="System Notifications" type="button">
+<span class="material-symbols-outlined" style="font-size: 18px;">notifications</span>
+<span class="absolute top-2 right-2 w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+</button>
+<div class="h-4 w-px bg-[#1e293b] mx-0.5"></div>
+<div class="flex items-center gap-2 pl-1">
+<div class="w-7 h-7 rounded bg-[#1a263d] border border-[#223049] flex items-center justify-center text-cyan-300 text-[11px] font-bold">
+            JD
+          </div>
+<div class="flex flex-col text-left">
+<span class="text-[12px] font-semibold text-white leading-tight">J. Doe</span>
+<span class="text-[10px] font-mono text-slate-400 leading-tight">L3 Fraud Lead</span>
+</div>
+</div>
+</div>
+</header>
+<!-- CONTENT WRAPPER -->
+<div class="flex-1 flex flex-col p-3.5 gap-2.5 overflow-hidden">
+<!-- PAGE HEADER BAR -->
+<section class="flex items-center justify-between bg-[#131d31] px-3.5 py-2.5 rounded border border-[#223049] shrink-0"><div><div class="flex items-center gap-2.5"><h1 class="text-[16px] font-bold text-white tracking-tight leading-none">Transactions Ledger &amp; Real-Time Scoring</h1><span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-cyan-950/70 text-cyan-300 text-[11px] font-medium border border-cyan-800/60"><span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>Live Stream Active</span></div><p class="text-[12px] text-slate-400 mt-1 leading-none">Inspect incoming payment transactions evaluated by Random Forest classification</p></div><div class="flex items-center gap-2"><button class="h-8 px-3 rounded bg-[#0f172a] border border-[#223049] text-slate-200 text-[12px] font-medium hover:bg-[#1a263d] hover:border-cyan-500/40 transition-colors flex items-center gap-1.5" onclick="document.getElementById('sandbox-modal').classList.remove('hidden')" type="button"><span class="material-symbols-outlined text-cyan-400" style="font-size: 16px;">add_circle</span>Add Test Transaction</button><button class="h-8 px-3 rounded bg-cyan-500 text-[#041e26] font-semibold text-[12px] hover:bg-cyan-400 transition-colors flex items-center gap-1.5" type="button"><span class="material-symbols-outlined" style="font-size: 16px;">download</span>Export CSV</button></div></section>
+<!-- FILTER TOOLBAR & ACTIVE PILLS -->
+<section class="flex flex-col gap-2 bg-[#131d31] p-2.5 rounded border border-[#223049] shrink-0"><div class="grid grid-cols-12 gap-2 items-center"><div class="col-span-4 relative"><span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" style="font-size: 16px;">search</span><input class="w-full h-8 pl-8 pr-2.5 bg-[#0f172a] border border-[#223049] rounded text-[12px] text-slate-200 placeholder:text-slate-500 focus:border-cyan-400 focus:ring-0 font-sans" placeholder="Search by hash, account, merchant..." type="text"></div><div class="col-span-2"><select class="w-full h-8 px-2 bg-[#0f172a] border border-[#223049] rounded text-[12px] text-slate-200 focus:border-cyan-400 focus:ring-0 font-sans"><option>Risk Score: All</option><option selected="">High Risk (&gt;0.70)</option><option>Medium (0.40 – 0.70)</option><option>Low Risk (&lt;0.40)</option></select></div><div class="col-span-2"><select class="w-full h-8 px-2 bg-[#0f172a] border border-[#223049] rounded text-[12px] text-slate-200 focus:border-cyan-400 focus:ring-0 font-sans"><option>Decision: All</option><option selected="">Flagged Fraud</option><option>Review</option><option>Approved</option></select></div><div class="col-span-2"><select class="w-full h-8 px-2 bg-[#0f172a] border border-[#223049] rounded text-[12px] text-slate-200 focus:border-cyan-400 focus:ring-0 font-sans"><option>Channel: All</option><option selected="">Online / E-Commerce</option><option>Credit Card POS</option><option>Direct Bank Transfer</option><option>Mobile Payment</option></select></div><div class="col-span-2 flex items-center"><div class="w-full flex items-center justify-between h-8 px-2.5 bg-[#0f172a] border border-[#223049] rounded text-[12px] text-slate-300 cursor-pointer hover:bg-[#1a263d] font-sans"><div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-slate-400" style="font-size: 15px;">calendar_today</span><span class="">Last 24 Hours</span></div><span class="material-symbols-outlined text-slate-500" style="font-size: 16px;">expand_more</span></div></div></div><div class="flex items-center justify-between border-t border-[#1e293b] pt-2 text-[11px]"><div class="flex items-center gap-1.5 flex-wrap"><span class="text-slate-400 text-[11px] font-sans">Active Filters:</span><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-950/70 text-red-300 font-sans border border-red-800/50"><span class="">Risk: &gt;0.70</span><button class="hover:text-white" type="button"><span class="material-symbols-outlined" style="font-size: 13px;">close</span></button></span><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#1e293b] text-slate-300 font-sans border border-[#223049]"><span class="">Decision: Flagged Fraud</span><button class="hover:text-white" type="button"><span class="material-symbols-outlined" style="font-size: 13px;">close</span></button></span><button class="text-cyan-400 hover:underline font-semibold ml-1 text-[11px] font-sans" type="button">Clear All</button></div><div class="flex items-center gap-2 text-slate-400 font-sans text-[11px]"><span class="">Evaluation Rate: <strong class="text-white font-medium">85 tx/sec</strong></span><span class="text-slate-600">|</span><span class="">Flagged: <strong class="text-red-400 font-medium">4.1%</strong></span></div></div></section>
+<!-- DATA AREA: SPLIT VIEW (TABLE + FORENSIC INSPECTOR) -->
+<div class="flex-1 flex gap-2.5 overflow-hidden min-h-0">
+<!-- TRANSACTIONS LEDGER TABLE -->
+<section class="flex-1 bg-[#131d31] rounded border border-[#223049] flex flex-col overflow-hidden min-w-0">
+<div class="flex-1 overflow-y-auto overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[780px]">
+<thead class="sticky top-0 bg-[#0f172a] z-10">
+<tr class="border-b border-[#1e293b] h-9 text-slate-400 text-[11px] uppercase tracking-wider font-semibold">
+<th class="w-8 px-3 text-center">
+<input class="rounded border-[#223049] bg-[#0b111e] text-cyan-500 focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5" type="checkbox">
+</th>
+<th class="px-3 py-2">Tx Hash</th>
+<th class="px-3 py-2">Timestamp (UTC)</th>
+<th class="px-3 py-2">Account / Entity</th>
+<th class="px-3 py-2 text-right">Amount</th>
+<th class="px-3 py-2">Channel</th>
+<th class="px-3 py-2 text-center w-36">Risk Score</th>
+<th class="px-3 py-2 text-center">Decision</th>
+<th class="px-3 py-2 text-right w-20">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#1e293b] text-[12px] text-slate-200"><tr class="bg-cyan-950/20 border-l-2 border-l-cyan-400 hover:bg-[#1a263d]/80 transition-colors cursor-pointer"><td class="px-3 py-2 text-center"><input checked="" class="rounded border-[#223049] bg-[#0b111e] text-cyan-500 focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5" type="checkbox"></td><td class="px-3 py-2"><span class="font-mono text-cyan-400 font-semibold text-[11px]">tx_98f4c01b...2a1c</span></td><td class="px-3 py-2 font-mono text-slate-400 text-[11px]">14:32:08</td><td class="px-3 py-2"><div class="flex flex-col font-sans"><span class="font-medium text-white leading-tight">Apex Tech Supplies</span><span class="font-mono text-slate-500 text-[10px]">ACC-882914</span></div></td><td class="px-3 py-2 text-right font-sans font-semibold text-white">$4,250.00</td><td class="px-3 py-2 font-sans"><span class="inline-flex items-center gap-1 text-slate-300 text-[11px]"><span class="material-symbols-outlined text-slate-400" style="font-size: 14px;">credit_card</span>Online Store</span></td><td class="px-3 py-2 text-center"><div class="flex items-center gap-2 justify-center"><div class="w-16 h-1.5 bg-[#1e293b] rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width: 84%;"></div></div><span class="font-mono font-bold text-red-500 text-[11px]">0.84</span></div></td><td class="px-3 py-2 text-center"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-950/70 text-red-400 border border-red-600/40 text-[10px] font-semibold font-sans"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>Flagged Fraud</span></td><td class="px-3 py-2 text-right"><button class="px-2 py-0.5 rounded bg-cyan-950/50 border border-cyan-700/50 text-cyan-300 text-[11px] font-medium hover:bg-cyan-900/50 transition-colors font-sans" type="button">Inspect</button></td></tr><tr class="hover:bg-[#1a263d] transition-colors cursor-pointer"><td class="px-3 py-2 text-center"><input class="rounded border-[#223049] bg-[#0b111e] text-cyan-500 focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5" type="checkbox"></td><td class="px-3 py-2"><span class="font-mono text-cyan-400 font-medium text-[11px]">tx_e34a7819...90ff</span></td><td class="px-3 py-2 font-mono text-slate-400 text-[11px]">14:31:44</td><td class="px-3 py-2"><div class="flex flex-col font-sans"><span class="font-medium text-white leading-tight">Metro Department Store</span><span class="font-mono text-slate-500 text-[10px]">ACC-104921</span></div></td><td class="px-3 py-2 text-right font-sans font-semibold text-white">$850.00</td><td class="px-3 py-2 font-sans"><span class="inline-flex items-center gap-1 text-slate-300 text-[11px]"><span class="material-symbols-outlined text-slate-400" style="font-size: 14px;">point_of_sale</span>POS Terminal</span></td><td class="px-3 py-2 text-center"><div class="flex items-center gap-2 justify-center"><div class="w-16 h-1.5 bg-[#1e293b] rounded-full overflow-hidden"><div class="h-full bg-amber-500 rounded-full" style="width: 62%;"></div></div><span class="font-mono font-bold text-amber-400 text-[11px]">0.62</span></div></td><td class="px-3 py-2 text-center"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[10px] font-semibold font-sans"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>Needs Review</span></td><td class="px-3 py-2 text-right"><button class="px-2 py-0.5 rounded bg-[#1e293b] text-slate-300 text-[11px] font-medium hover:text-white hover:bg-slate-700 transition-colors font-sans" type="button">Inspect</button></td></tr><tr class="hover:bg-[#1a263d] transition-colors cursor-pointer"><td class="px-3 py-2 text-center"><input class="rounded border-[#223049] bg-[#0b111e] text-cyan-500 focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5" type="checkbox"></td><td class="px-3 py-2"><span class="font-mono text-cyan-400 font-medium text-[11px]">tx_11b7aa82...dd41</span></td><td class="px-3 py-2 font-mono text-slate-400 text-[11px]">14:30:12</td><td class="px-3 py-2"><div class="flex flex-col font-sans"><span class="font-medium text-white leading-tight">Corner Market &amp; Bakery</span><span class="font-mono text-slate-500 text-[10px]">ACC-902183</span></div></td><td class="px-3 py-2 text-right font-sans font-semibold text-white">$45.20</td><td class="px-3 py-2 font-sans"><span class="inline-flex items-center gap-1 text-slate-300 text-[11px]"><span class="material-symbols-outlined text-slate-400" style="font-size: 14px;">point_of_sale</span>POS Terminal</span></td><td class="px-3 py-2 text-center"><div class="flex items-center gap-2 justify-center"><div class="w-16 h-1.5 bg-[#1e293b] rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width: 12%;"></div></div><span class="font-mono font-bold text-emerald-400 text-[11px]">0.12</span></div></td><td class="px-3 py-2 text-center"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[10px] font-semibold font-sans"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Approved</span></td><td class="px-3 py-2 text-right"><button class="px-2 py-0.5 rounded bg-[#1e293b] text-slate-300 text-[11px] font-medium hover:text-white hover:bg-slate-700 transition-colors font-sans" type="button">Inspect</button></td></tr><tr class="hover:bg-[#1a263d] transition-colors cursor-pointer"><td class="px-3 py-2 text-center"><input class="rounded border-[#223049] bg-[#0b111e] text-cyan-500 focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5" type="checkbox"></td><td class="px-3 py-2"><span class="font-mono text-cyan-400 font-medium text-[11px]">tx_55fa09bc...110e</span></td><td class="px-3 py-2 font-mono text-slate-400 text-[11px]">14:29:50</td><td class="px-3 py-2"><div class="flex flex-col font-sans"><span class="font-medium text-white leading-tight">Global Digital Gadgets</span><span class="font-mono text-slate-500 text-[10px]">ACC-449102</span></div></td><td class="px-3 py-2 text-right font-sans font-semibold text-white">$1,200.00</td><td class="px-3 py-2 font-sans"><span class="inline-flex items-center gap-1 text-slate-300 text-[11px]"><span class="material-symbols-outlined text-slate-400" style="font-size: 14px;">credit_card</span>Online Store</span></td><td class="px-3 py-2 text-center"><div class="flex items-center gap-2 justify-center"><div class="w-16 h-1.5 bg-[#1e293b] rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width: 91%;"></div></div><span class="font-mono font-bold text-red-500 text-[11px]">0.91</span></div></td><td class="px-3 py-2 text-center"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-950/70 text-red-400 border border-red-600/40 text-[10px] font-semibold font-sans"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>Flagged Fraud</span></td><td class="px-3 py-2 text-right"><button class="px-2 py-0.5 rounded bg-[#1e293b] text-slate-300 text-[11px] font-medium hover:text-white hover:bg-slate-700 transition-colors font-sans" type="button">Inspect</button></td></tr><tr class="hover:bg-[#1a263d] transition-colors cursor-pointer"><td class="px-3 py-2 text-center"><input class="rounded border-[#223049] bg-[#0b111e] text-cyan-500 focus:ring-0 focus:ring-offset-0 w-3.5 h-3.5" type="checkbox"></td><td class="px-3 py-2"><span class="font-mono text-cyan-400 font-medium text-[11px]">tx_aa093411...7c22</span></td><td class="px-3 py-2 font-mono text-slate-400 text-[11px]">14:28:19</td><td class="px-3 py-2"><div class="flex flex-col font-sans"><span class="font-medium text-white leading-tight">Steam Games Online</span><span class="font-mono text-slate-500 text-[10px]">ACC-771900</span></div></td><td class="px-3 py-2 text-right font-sans font-semibold text-white">$120.00</td><td class="px-3 py-2 font-sans"><span class="inline-flex items-center gap-1 text-slate-300 text-[11px]"><span class="material-symbols-outlined text-slate-400" style="font-size: 14px;">credit_card</span>Online Store</span></td><td class="px-3 py-2 text-center"><div class="flex items-center gap-2 justify-center"><div class="w-16 h-1.5 bg-[#1e293b] rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width: 8%;"></div></div><span class="font-mono font-bold text-emerald-400 text-[11px]">0.08</span></div></td><td class="px-3 py-2 text-center"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[10px] font-semibold font-sans"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Approved</span></td><td class="px-3 py-2 text-right"><button class="px-2 py-0.5 rounded bg-[#1e293b] text-slate-300 text-[11px] font-medium hover:text-white hover:bg-slate-700 transition-colors font-sans" type="button">Inspect</button></td></tr></tbody>
+</table>
+</div>
+<!-- TABLE PAGINATION FOOTER -->
+<div class="h-10 px-3 bg-[#0f172a] border-t border-[#1e293b] flex items-center justify-between shrink-0 text-[11px]">
+<div class="flex items-center gap-3 text-slate-400">
+<span class="">Showing <strong class="text-white font-semibold">1 - 25</strong> of <strong class="text-white font-semibold">14,820</strong> records</span>
+<div class="h-3.5 w-px bg-[#1e293b]"></div>
+<div class="flex items-center gap-1.5">
+<span class="">Rows:</span>
+<select class="h-6 py-0 pl-1.5 pr-5 bg-[#131d31] border border-[#223049] rounded font-mono text-slate-200 text-[11px] focus:ring-0">
+<option selected="">25</option>
+<option>50</option>
+<option>100</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-1 font-mono">
+<button class="w-6 h-6 flex items-center justify-center rounded border border-[#1e293b] bg-[#131d31] text-slate-600 cursor-not-allowed" disabled="" type="button">
+<span class="material-symbols-outlined" style="font-size: 15px;">chevron_left</span>
+</button>
+<span class="w-6 h-6 flex items-center justify-center rounded bg-cyan-500 text-[#041e26] font-bold text-[11px]">1</span>
+<button class="w-6 h-6 flex items-center justify-center rounded border border-[#223049] bg-[#131d31] text-slate-300 hover:bg-[#1a263d] text-[11px]" type="button">2</button>
+<button class="w-6 h-6 flex items-center justify-center rounded border border-[#223049] bg-[#131d31] text-slate-300 hover:bg-[#1a263d] text-[11px]" type="button">3</button>
+<span class="px-1 text-slate-500">...</span>
+<button class="w-6 h-6 flex items-center justify-center rounded border border-[#223049] bg-[#131d31] text-slate-300 hover:bg-[#1a263d] text-[11px]" type="button">593</button>
+<button class="w-6 h-6 flex items-center justify-center rounded border border-[#223049] bg-[#131d31] text-slate-300 hover:bg-[#1a263d]" type="button">
+<span class="material-symbols-outlined" style="font-size: 15px;">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- ======================================================== -->
+<!-- FORENSIC INSPECTOR DRAWER (width: 360px)                 -->
+<!-- ======================================================== -->
+<aside class="w-[360px] bg-[#131d31] border border-[#223049] rounded flex flex-col justify-between overflow-hidden shrink-0 shadow-lg" id="inspection-drawer"><div class="px-3.5 py-2.5 border-b border-[#1e293b] flex items-center justify-between bg-[#0f172a] shrink-0"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-cyan-400" style="font-size: 18px;">insights</span><div><h3 class="font-sans text-[13px] font-bold text-white leading-tight">Transaction &amp; Model Explainability</h3><span class="font-mono text-[10px] text-cyan-400 leading-tight block">tx_98f4c01b...2a1c</span></div></div><span class="px-1.5 py-0.5 rounded bg-red-950/80 border border-red-700/60 text-red-300 font-sans text-[10px] font-bold">FLAGGED</span></div><div class="p-3 flex-1 overflow-y-auto flex flex-col gap-2.5 text-[12px]"><div class="p-2.5 rounded bg-red-950/40 border border-red-600/50 flex items-center justify-between"><div><span class="text-[10px] uppercase font-bold text-red-300 tracking-wider block font-sans">Random Forest Classification</span><p class="text-white text-[12px] font-semibold mt-0.5 font-sans">Predicted Fraud</p><p class="text-[10px] text-red-300 mt-0.5 font-sans">Spike in amount vs 30-day baseline</p></div><div class="text-right"><span class="font-mono text-[22px] font-bold text-red-400 leading-none">0.84</span><span class="block text-[9px] text-slate-400 uppercase tracking-wide font-sans">Probability</span></div></div><div class="border border-[#1e293b] rounded p-2.5 bg-[#0f172a]"><h4 class="text-[10px] uppercase text-slate-400 font-bold tracking-wider mb-2 font-sans">Transaction Details</h4><dl class="grid grid-cols-2 gap-y-2 gap-x-2 text-[11px]"><div><dt class="text-slate-400 text-[10px] font-sans">Merchant / Entity</dt><dd class="font-medium text-white truncate mt-0.5 font-sans">Apex Tech Supplies</dd></div><div><dt class="text-slate-400 text-[10px] font-sans">Amount</dt><dd class="font-sans font-semibold text-white truncate mt-0.5">$4,250.00 USD</dd></div><div><dt class="text-slate-400 text-[10px] font-sans">Payment Channel</dt><dd class="font-sans text-slate-300 truncate mt-0.5">Online Store</dd></div><div><dt class="text-slate-400 text-[10px] font-sans">Account ID</dt><dd class="font-mono text-slate-300 truncate mt-0.5">ACC-882914</dd></div></dl></div><div class="border border-[#1e293b] rounded p-2.5 bg-[#0f172a]"><div class="flex items-center justify-between mb-2"><h4 class="text-[10px] uppercase text-slate-400 font-bold tracking-wider font-sans">Top SHAP Feature Contributions</h4><span class="text-[10px] font-mono text-cyan-400">SHAP Values</span></div><div class="space-y-2.5 font-sans"><div><div class="flex justify-between text-[10px] font-mono mb-1"><span class="text-slate-300">amt_ratio_to_avg</span><span class="text-red-400 font-bold">+0.31</span></div><div class="w-full h-1.5 bg-[#1e293b] rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width: 78%;"></div></div></div><div><div class="flex justify-between text-[10px] font-mono mb-1"><span class="text-slate-300">velocity_last_24h</span><span class="text-red-400 font-bold">+0.22</span></div><div class="w-full h-1.5 bg-[#1e293b] rounded-full overflow-hidden"><div class="h-full bg-red-500 rounded-full" style="width: 55%;"></div></div></div><div><div class="flex justify-between text-[10px] font-mono mb-1"><span class="text-slate-300">is_foreign_merchant</span><span class="text-red-400 font-bold">+0.14</span></div><div class="w-full h-1.5 bg-[#1e293b] rounded-full overflow-hidden"><div class="h-full bg-red-400 rounded-full" style="width: 35%;"></div></div></div></div></div><div class="px-2 py-1.5 rounded bg-[#0b111e] border border-[#1e293b] text-[10px] font-sans text-slate-400 flex items-center justify-between"><span class="">Model: <strong class="text-cyan-400">RandomForestClassifier</strong></span><span class="text-slate-600">|</span><span class="">Trees: <strong class="text-white">100</strong></span><span class="text-slate-600">|</span><span class="">Depth: <strong class="text-white">12</strong></span></div></div><div class="px-3.5 py-2.5 border-t border-[#1e293b] bg-[#0f172a] flex items-center justify-between shrink-0"><button class="h-7 px-3 rounded bg-[#131d31] border border-[#223049] text-slate-300 text-[11px] font-medium hover:bg-[#1a263d] transition-colors font-sans" onclick="dismissDrawer()" type="button">Dismiss</button><div class="flex items-center gap-1.5"><button class="h-7 px-2.5 rounded bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-[11px] font-medium hover:bg-emerald-900/60 transition-colors font-sans" type="button">Clear Transaction</button><button class="h-7 px-3 rounded bg-red-600 text-white text-[11px] font-semibold hover:bg-red-500 transition-colors shadow-sm font-sans" type="button">Mark as Confirmed Fraud</button></div></div></aside>
+</div>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- MODAL: Inject Test Transaction (Sandbox)                 -->
+<!-- ======================================================== -->
+<div class="absolute inset-0 bg-[#080e1b]/80 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4" id="sandbox-modal">
+<div class="bg-[#131d31] rounded border border-[#223049] w-full max-w-md shadow-2xl overflow-hidden"><div class="p-3 border-b border-[#1e293b] flex items-center justify-between bg-[#0f172a]"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-cyan-400">add_card</span><h3 class="text-[13px] text-white font-semibold font-sans">Add Test Transaction</h3></div><button class="text-slate-400 hover:text-white transition-colors" onclick="document.getElementById('sandbox-modal').classList.add('hidden')" type="button"><span class="material-symbols-outlined" style="font-size: 18px;">close</span></button></div><form class="p-3.5 flex flex-col gap-2.5 text-[12px] font-sans" onsubmit="event.preventDefault(); document.getElementById('sandbox-modal').classList.add('hidden'); alert('Test transaction saved to database and evaluated by Random Forest!');"><div class="grid grid-cols-2 gap-2"><div><label class="text-[10px] uppercase text-slate-400 block mb-1 font-semibold">Origin Account ID</label><input class="w-full h-8 px-2.5 bg-[#0f172a] border border-[#223049] rounded text-[12px] text-white focus:border-cyan-400 font-mono" type="text" value="ACC-TEST-1049"></div><div><label class="text-[10px] uppercase text-slate-400 block mb-1 font-semibold">Merchant Name</label><input class="w-full h-8 px-2.5 bg-[#0f172a] border border-[#223049] rounded text-[12px] text-white focus:border-cyan-400 font-sans" type="text" value="Electronics Emporium"></div></div><div class="grid grid-cols-2 gap-2"><div><label class="text-[10px] uppercase text-slate-400 block mb-1 font-semibold">Amount (USD)</label><input class="w-full h-8 px-2 bg-[#0f172a] border border-[#223049] rounded text-[12px] text-white focus:border-cyan-400 font-sans" step="0.01" type="number" value="1250.00"></div><div><label class="text-[10px] uppercase text-slate-400 block mb-1 font-semibold">Payment Channel</label><select class="w-full h-8 px-2 bg-[#0f172a] border border-[#223049] rounded text-[12px] text-white focus:border-cyan-400 font-sans"><option selected="">Online / E-Commerce</option><option>Credit Card POS</option><option>Bank Transfer</option></select></div></div><div class="p-2 bg-[#0f172a] rounded border border-[#223049] text-[11px] text-slate-400 font-sans">Transaction will be persisted into MySQL database and classified live via <strong class="text-cyan-400">Random Forest (v1.0)</strong>.</div><div class="flex items-center justify-end gap-2 border-t border-[#1e293b] pt-2.5 mt-1"><button class="h-7 px-3 rounded bg-[#0f172a] border border-[#223049] text-slate-300 text-[11px] hover:bg-[#1a263d] transition-colors font-sans" onclick="document.getElementById('sandbox-modal').classList.add('hidden')" type="button">Cancel</button><button class="h-7 px-3.5 rounded bg-cyan-500 text-[#041e26] font-semibold text-[11px] hover:bg-cyan-400 transition-colors font-sans" type="submit">Save &amp; Score Transaction</button></div></form></div>
+</div>
+</div>
+<!-- Interactive Drawer Scripts -->
+<script>
+  function selectRow(txId, risk, account, amount, reason, network, fp) {
+    document.getElementById('drawer-tx-id').innerText = txId;
+    document.getElementById('drawer-risk-score').innerText = risk;
+    document.getElementById('drawer-account').innerText = account;
+    document.getElementById('drawer-amount').innerText = amount;
+    document.getElementById('drawer-reason').innerText = reason;
+    document.getElementById('drawer-network').innerHTML = `<span class="material-symbols-outlined text-amber-400" style="font-size: 12px;">vpn_lock</span> ${network}`;
+    document.getElementById('drawer-fp').innerText = fp;
+
+    const riskNum = parseFloat(risk);
+    const badge = document.getElementById('drawer-badge');
+    const decisionText = document.getElementById('drawer-decision-text');
+
+    if (riskNum >= 0.85) {
+      badge.innerText = 'CRITICAL';
+      badge.className = 'px-1.5 py-0.5 rounded bg-red-950/80 border border-red-700/60 text-red-300 font-mono text-[10px] font-bold';
+      decisionText.innerText = `Critical Fraud (${risk})`;
+    } else if (riskNum >= 0.5) {
+      badge.innerText = 'SUSPICIOUS';
+      badge.className = 'px-1.5 py-0.5 rounded bg-amber-950/80 border border-amber-700/60 text-amber-300 font-mono text-[10px] font-bold';
+      decisionText.innerText = `Pending Review (${risk})`;
+    } else {
+      badge.innerText = 'NORMAL';
+      badge.className = 'px-1.5 py-0.5 rounded bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 font-mono text-[10px] font-bold';
+      decisionText.innerText = `Cleared Baseline (${risk})`;
+    }
+
+    const drawer = document.getElementById('inspection-drawer');
+    drawer.classList.remove('opacity-40');
+  }
+
+  function dismissDrawer() {
+    const drawer = document.getElementById('inspection-drawer');
+    drawer.classList.add('opacity-40');
+  }
+</script>
+
+
+</body></html>
